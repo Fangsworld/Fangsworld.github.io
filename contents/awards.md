@@ -1,13 +1,9 @@
-- National Scholarship of Graduate Student, 2024.
+- 学术资源, 认知科学，AI技术.
 
-- First-prize Scholarship of CUMT, 2024.
+- 软件开发, 极客社区.
 
-- First-prize Scholarship of CUMT, 2023.
+- 阅读资源，书籍，博客，学习网站.
 
-- Freshman Scholarship of CUMT, 2022.
+- 效率工具， zetore, textmate,AI工具.
 
-- Excellent Graduation Project of Jiangsu Province, 2022.
-
-- First-prize Enterprise Scholarship of CUMT, 2020.
-
-- First-prize Scholarship of CUMT, 2019.
+- 商业资源，企业管理，商业数据，领域资讯.
