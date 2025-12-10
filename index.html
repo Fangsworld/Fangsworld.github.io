@@ -15,6 +15,18 @@
     
     <!-- Styles -->
     <link rel="stylesheet" href="styles/main.css">
+    
+    <!-- Inline CSS for "最近更新" smaller size -->
+    <style>
+        .latest-section .section-title {
+            font-size: 1.5rem !important;
+            font-weight: 600 !important;
+        }
+        .latest-section .section-subtitle {
+            font-size: 0.9rem !important;
+            opacity: 0.8 !important;
+        }
+    </style>
 </head>
 <body>
     <!-- 装饰性背景 -->
@@ -63,12 +75,7 @@
                                 在这个信息爆炸的时代，我专注于深度思考与有效表达，
                                 用文字构建思维的桥梁，用逻辑点亮智慧的火花。
                             </p>
-                            <div class="hero-actions">
-                                <button class="btn-primary" onclick="scrollToSection('latest-updates')">
-                                    <i data-lucide="arrow-down"></i>
-                                    查看最新内容
-                                </button>
-                            </div>
+
                         </div>
                         <div class="hero-visual">
                             <div class="hero-avatar">
@@ -83,7 +90,7 @@
             <section id="latest-updates" class="latest-section">
                 <div class="container">
                     <div class="section-header">
-                        <h2 class="section-title">最新更新</h2>
+                        <h2 class="section-title">最近更新</h2>
                         <p class="section-subtitle">分享最新的思考与创作</p>
                     </div>
                     <div class="latest-articles" id="latestArticles">
