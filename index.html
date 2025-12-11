@@ -16,17 +16,6 @@
     <!-- Styles -->
     <link rel="stylesheet" href="styles/main.css">
     
-    <!-- Inline CSS for "最近更新" smaller size -->
-    <style>
-        .latest-section .section-title {
-            font-size: 1.5rem !important;
-            font-weight: 600 !important;
-        }
-        .latest-section .section-subtitle {
-            font-size: 0.9rem !important;
-            opacity: 0.8 !important;
-        }
-    </style>
 </head>
 <body>
     <!-- 装饰性背景 -->
@@ -153,17 +142,25 @@
         </section>
     </main>
 
-    <!-- 文章详情模态框 -->
-    <div id="articleModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="modalTitle"></h3>
-                <button class="modal-close" id="modalClose">
-                    <i data-lucide="x"></i>
-                </button>
+    <!-- 文章详情页面 -->
+    <div id="articleView" class="article-view-container">
+        <div class="article-view-header">
+            <button class="back-button" id="backButton">
+                <i data-lucide="arrow-left"></i>
+                <span>返回</span>
+            </button>
+        </div>
+        <div class="article-view-content">
+            <h1 class="article-view-title" id="articleTitle"></h1>
+            <div class="article-view-meta">
+                <span class="article-category" id="articleCategory"></span>
+                <span class="article-date" id="articleDate"></span>
             </div>
-            <div class="modal-body" id="modalBody">
+            <div class="article-view-body" id="articleBody">
                 <!-- 文章内容将通过JavaScript生成 -->
+            </div>
+            <div class="article-view-tags" id="articleTags">
+                <!-- 文章标签将通过JavaScript生成 -->
             </div>
         </div>
     </div>

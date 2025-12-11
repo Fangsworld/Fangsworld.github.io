@@ -1,13 +1,15 @@
-// ===== 宇文平野个人网站交互脚本 =====
+import os
+import re
+from pathlib import Path
 
-// 文章数据
-const articlesData = {
-  reading: [
+# 从app.js中提取的文章数据
+articlesData = {
+  "reading": [
     {
-      id: 1,
-      title: "《思考，快与慢》读书笔记：理性与直觉的博弈",
-      excerpt: "深入解读丹尼尔·卡尼曼的诺贝尔经济学奖作品，探讨人类决策中的理性与直觉如何影响我们的判断...",
-      content: `
+      "id": 1,
+      "title": "《思考，快与慢》读书笔记：理性与直觉的博弈",
+      "excerpt": "深入解读丹尼尔·卡尼曼的诺贝尔经济学奖作品，探讨人类决策中的理性与直觉如何影响我们的判断...",
+      "content": """
         <h1>《思考，快与慢》读书笔记：理性与直觉的博弈</h1>
         
         <p>丹尼尔·卡尼曼在这本开创性的著作中，向我们展示了人类思维的两个系统：系统1（快速、直觉）和系统2（缓慢、理性）。这本书不仅获得了诺贝尔经济学奖，更重要的是它改变了我对自己思维方式的基本认知。</p>
@@ -23,16 +25,16 @@ const articlesData = {
         </ul>
         
         <p>这本书最大的价值在于它帮助我们认识到自己的认知局限性，从而更好地做出决策。在信息过载的时代，这种自我认知显得尤为重要。</p>
-      `,
-      date: "2025-12-01",
-      tags: ["认知科学", "决策", "心理学"],
-      category: "reading"
+      """,
+      "date": "2025-12-01",
+      "tags": ["认知科学", "决策", "心理学"],
+      "category": "reading"
     },
     {
-      id: 2,
-      title: "《人类简史》读后感：重新审视文明的进程",
-      excerpt: "尤瓦尔·赫拉利以独特的视角审视了人类从狩猎采集到农业文明，再到工业革命的整个历程...",
-      content: `
+      "id": 2,
+      "title": "《人类简史》读后感：重新审视文明的进程",
+      "excerpt": "尤瓦尔·赫拉利以独特的视角审视了人类从狩猎采集到农业文明，再到工业革命的整个历程...",
+      "content": """
         <h1>《人类简史》读后感：重新审视文明的进程</h1>
         
         <p>尤瓦尔·赫拉利用一种近乎冷酷的理性视角，重新审视了人类文明的进程。这本书最震撼的部分在于它揭示了我们习以为常的社会秩序其实都是"想象的现实"。</p>
@@ -44,16 +46,16 @@ const articlesData = {
         <p>农业革命虽然让人类过上了定居生活，但也带来了疾病、不平等和社会等级的固化。这种进步与代价的并存，让我们思考什么才是真正的发展。</p>
         
         <p>这本书提醒我们，历史没有标准答案，每个时代都有其特定的挑战和机遇。作为现代人，我们需要用更宽广的视角来理解当下的世界。</p>
-      `,
-      date: "2025-11-28",
-      tags: ["历史", "文明", "哲学"],
-      category: "reading"
+      """,
+      "date": "2025-11-28",
+      "tags": ["历史", "文明", "哲学"],
+      "category": "reading"
     },
     {
-      id: 3,
-      title: "《刻意练习》实践指南：从新手到专家的科学方法",
-      excerpt: "揭示了\"天才\"背后的科学秘密，分享如何在任何领域实现突破性成长...",
-      content: `
+      "id": 3,
+      "title": "《刻意练习》实践指南：从新手到专家的科学方法",
+      "excerpt": "揭示了\"天才\"背后的科学秘密，分享如何在任何领域实现突破性成长...",
+      "content": """
         <h1>《刻意练习》实践指南：从新手到专家的科学方法</h1>
         
         <p>安德斯·艾利克森通过大量的研究发现，所谓"天赋"其实是可以通过科学的练习方法培养的。这本书彻底改变了我对学习和成长的认知。</p>
@@ -76,16 +78,16 @@ const articlesData = {
         </ul>
         
         <p>刻意练习不仅适用于技能学习，也可以应用到思维训练、写作能力等各个方面。关键是要保持耐心和坚持。</p>
-      `,
-      date: "2025-11-25",
-      tags: ["学习方法", "成长", "科学"],
-      category: "reading"
+      """,
+      "date": "2025-11-25",
+      "tags": ["学习方法", "成长", "科学"],
+      "category": "reading"
     },
     {
-      id: 4,
-      title: "《影响力》解读：说服力的心理学原理",
-      excerpt: "罗伯特·西奥迪尼总结了影响力的六大原则，这些原理在现代社会中无处不在...",
-      content: `
+      "id": 4,
+      "title": "《影响力》解读：说服力的心理学原理",
+      "excerpt": "罗伯特·西奥迪尼总结了影响力的六大原则，这些原理在现代社会中无处不在...",
+      "content": """
         <h1>《影响力》解读：说服力的心理学原理</h1>
         
         <p>罗伯特·西奥迪尼通过大量的实验研究，总结出了影响力的六大原则。这些原则不仅帮助我们理解他人的行为，也让我们更加警觉地面对各种说服手段。</p>
@@ -110,16 +112,16 @@ const articlesData = {
         </ul>
         
         <p>这本书不是教我们如何操纵他人，而是帮助我们理解影响力的本质，在保护自己的同时，更好地与他人沟通和协作。</p>
-      `,
-      date: "2025-11-22",
-      tags: ["心理学", "沟通", "影响力"],
-      category: "reading"
+      """,
+      "date": "2025-11-22",
+      "tags": ["心理学", "沟通", "影响力"],
+      "category": "reading"
     },
     {
-      id: 5,
-      title: "《原则》读书心得：建立系统化的决策框架",
-      excerpt: "瑞·达利欧分享了他在桥水基金建立的一套决策原则，这些原则同样适用于个人生活...",
-      content: `
+      "id": 5,
+      "title": "《原则》读书心得：建立系统化的决策框架",
+      "excerpt": "瑞·达利欧分享了他在桥水基金建立的一套决策原则，这些原则同样适用于个人生活...",
+      "content": """
         <h1>《原则》读书心得：建立系统化的决策框架</h1>
         
         <p>瑞·达利欧在《原则》中分享了他40多年来建立的一套决策框架。这本书不仅是投资管理的指南，更是人生决策的系统化方法论。</p>
@@ -144,16 +146,16 @@ const articlesData = {
         </ul>
         
         <p>最重要的是，这本书教会了我要"极度透明"和"极度真实"，这种态度不仅适用于工作，也适用于个人成长和与他人的关系。</p>
-      `,
-      date: "2025-11-19",
-      tags: ["决策", "管理", "原则"],
-      category: "reading"
+      """,
+      "date": "2025-11-19",
+      "tags": ["决策", "管理", "原则"],
+      "category": "reading"
     },
     {
-      id: 21,
-      title: "《原则》实践指南：建立个人决策框架",
-      excerpt: "瑞·达利欧的管理哲学深度解析，如何将抽象原则转化为具体的行动指南...",
-      content: `
+      "id": 21,
+      "title": "《原则》实践指南：建立个人决策框架",
+      "excerpt": "瑞·达利欧的管理哲学深度解析，如何将抽象原则转化为具体的行动指南...",
+      "content": """
         <h1>《原则》实践指南：建立个人决策框架</h1>
         
         <p>瑞·达利欧在《原则》一书中分享了他40年来积累的管理智慧，这本书不仅是一部投资教科书，更是一本关于如何建立有效决策体系的实用指南。</p>
@@ -178,16 +180,16 @@ const articlesData = {
         </ul>
         
         <p>这本书最大的价值在于它提供了一套完整的思考框架，帮助我们在复杂的世界中保持清晰的判断力。</p>
-      `,
-      date: "2025-12-05",
-      tags: ["管理哲学", "决策", "个人成长"],
-      category: "reading"
+      """,
+      "date": "2025-12-05",
+      "tags": ["管理哲学", "决策", "个人成长"],
+      "category": "reading"
     },
     {
-      id: 22,
-      title: "《金字塔原理》深度应用：逻辑表达的实用技巧",
-      excerpt: "芭芭拉·明托的经典著作解析，如何运用金字塔结构提升表达和写作能力...",
-      content: `
+      "id": 22,
+      "title": "《金字塔原理》深度应用：逻辑表达的实用技巧",
+      "excerpt": "芭芭拉·明托的经典著作解析，如何运用金字塔结构提升表达和写作能力...",
+      "content": """
         <h1>《金字塔原理》深度应用：逻辑表达的实用技巧</h1>
         
         <p>芭芭拉·明托的金字塔原理是麦肯锡公司最著名的思维工具之一，它帮助无数商务人士提升了表达和写作能力。这本书不仅是一本写作指南，更是一套完整的思维方法论。</p>
@@ -215,16 +217,16 @@ const articlesData = {
         </ul>
         
         <p>金字塔原理的价值在于它提供了一套可操作的思维工具，帮助我们更有条理地表达复杂思想。</p>
-      `,
-      date: "2025-12-03",
-      tags: ["逻辑思维", "表达技巧", "商务沟通"],
-      category: "reading"
+      """,
+      "date": "2025-12-03",
+      "tags": ["逻辑思维", "表达技巧", "商务沟通"],
+      "category": "reading"
     },
     {
-      id: 23,
-      title: "《深度工作》实践感悟：在专注中创造价值",
-      excerpt: "卡尔·纽波特的工作哲学分享，探讨如何在注意力稀缺的时代保持深度专注...",
-      content: `
+      "id": 23,
+      "title": "《深度工作》实践感悟：在专注中创造价值",
+      "excerpt": "卡尔·纽波特的工作哲学分享，探讨如何在注意力稀缺的时代保持深度专注...",
+      "content": """
         <h1>《深度工作》实践感悟：在专注中创造价值</h1>
         
         <p>卡尔·纽波特在《深度工作》一书中提出了一个重要观点：深度工作能力是21世纪最稀缺的能力之一。在注意力不断被分散的时代，如何保持专注和深度思考成为了一个关键问题。</p>
@@ -251,16 +253,16 @@ const articlesData = {
         </ul>
         
         <p>深度工作不仅提高了我的工作效率，更重要的是让我找回了创造的乐趣和意义感。</p>
-      `,
-      date: "2025-12-02",
-      tags: ["专注力", "工作效率", "时间管理"],
-      category: "reading"
+      """,
+      "date": "2025-12-02",
+      "tags": ["专注力", "工作效率", "时间管理"],
+      "category": "reading"
     },
     {
-      id: 24,
-      title: "《反脆弱》思考：如何在不确定性中成长",
-      excerpt: "纳西姆·塔勒布的哲学启示，探讨如何建立反脆弱性，在波动中受益...",
-      content: `
+      "id": 24,
+      "title": "《反脆弱》思考：如何在不确定性中成长",
+      "excerpt": "纳西姆·塔勒布的哲学启示，探讨如何建立反脆弱性，在波动中受益...",
+      "content": """
         <h1>《反脆弱》思考：如何在不确定性中成长</h1>
         
         <p>纳西姆·塔勒布在《反脆弱》一书中提出了一个革命性概念：反脆弱性。与传统的"强弱"二元论不同，他指出某些系统在冲击和压力下不仅能够恢复，还能变得更强大。</p>
@@ -287,16 +289,16 @@ const articlesData = {
         </ol>
         
         <p>反脆弱性教会我们不要害怕变化和不确定性，而要学会在其中找到成长的机会。</p>
-      `,
-      date: "2025-11-30",
-      tags: ["不确定性", "风险思维", "个人成长"],
-      category: "reading"
+      """,
+      "date": "2025-11-30",
+      "tags": ["不确定性", "风险思维", "个人成长"],
+      "category": "reading"
     },
     {
-      id: 25,
-      title: "《心流》体验：全神贯注的幸福状态",
-      excerpt: "米哈里·契克森米哈赖的积极心理学理论深度解读，探索最佳体验的心理机制...",
-      content: `
+      "id": 25,
+      "title": "《心流》体验：全神贯注的幸福状态",
+      "excerpt": "米哈里·契克森米哈赖的积极心理学理论深度解读，探索最佳体验的心理机制...",
+      "content": """
         <h1>《心流》体验：全神贯注的幸福状态</h1>
         
         <p>米哈里·契克森米哈赖通过对艺术家、运动员、医生等各行各业优秀人物的深入研究，发现了一个共同的心理现象：心流体验。这种状态下，人们会感到完全沉浸在自己所做的事情中，时间感消失，自我意识淡化。</p>
@@ -327,16 +329,16 @@ const articlesData = {
         </ol>
         
         <p>心流不仅是一种美妙的体验，更是提升生活质量和创造力的重要途径。</p>
-      `,
-      date: "2025-11-26",
-      tags: ["积极心理学", "专注力", "幸福感"],
-      category: "reading"
+      """,
+      "date": "2025-11-26",
+      "tags": ["积极心理学", "专注力", "幸福感"],
+      "category": "reading"
     },
     {
-      id: 41,
-      title: "《如何阅读一本书》精要：从被动阅读到主动思考",
-      excerpt: "莫提默·艾德勒的经典阅读指南，探讨如何通过系统性方法提升阅读质量和理解深度...",
-      content: `
+      "id": 41,
+      "title": "《如何阅读一本书》精要：从被动阅读到主动思考",
+      "excerpt": "莫提默·艾德勒的经典阅读指南，探讨如何通过系统性方法提升阅读质量和理解深度...",
+      "content": """
         <h1>《如何阅读一本书》精要：从被动阅读到主动思考</h1>
         
         <p>莫提默·艾德勒的《如何阅读一本书》是阅读领域的经典之作。这本书不仅教会我们如何阅读，更重要的是教会我们如何思考。在这个信息爆炸的时代，掌握正确的阅读方法比以往任何时候都更加重要。</p>
@@ -407,18 +409,18 @@ const articlesData = {
         </ul>
         
         <p>《如何阅读一本书》最大的价值在于它将阅读从一种被动的接收行为转变为一种主动的思考过程。掌握了正确的阅读方法，我们不仅能够获取知识，更能够培养独立思考的能力。</p>
-      `,
-      date: "2025-12-10",
-      tags: ["阅读方法", "思考技巧", "知识管理"],
-      category: "reading"
+      """,
+      "date": "2025-12-10",
+      "tags": ["阅读方法", "思考技巧", "知识管理"],
+      "category": "reading"
     }
   ],
-  writing: [
+  "writing": [
     {
-      id: 6,
-      title: "写作的本质：思想的载体与情感的桥梁",
-      excerpt: "探索写作的根本意义，理解文字如何承载我们的思想，传递我们的情感...",
-      content: `
+      "id": 6,
+      "title": "写作的本质：思想的载体与情感的桥梁",
+      "excerpt": "探索写作的根本意义，理解文字如何承载我们的思想，传递我们的情感...",
+      "content": """
         <h1>写作的本质：思想的载体与情感的桥梁</h1>
         
         <p>写作是什么？是记录，是表达，是创造。我认为，写作最本质的意义在于它是我们思维的外部化。通过文字，我们可以将内心的想法整理成清晰的结构，让模糊的思绪变得具体可感。</p>
@@ -443,16 +445,16 @@ const articlesData = {
         </ul>
         
         <p>写作是一个不断进化的过程，每一次尝试都是一次成长。</p>
-      `,
-      date: "2025-12-05",
-      tags: ["写作理念", "思考", "表达"],
-      category: "writing"
+      """,
+      "date": "2025-12-05",
+      "tags": ["写作理念", "思考", "表达"],
+      "category": "writing"
     },
     {
-      id: 7,
-      title: "如何构建有力的论证：逻辑与说服的平衡",
-      excerpt: "分享建立有说服力论证的方法，包括逻辑结构、证据运用和修辞技巧...",
-      content: `
+      "id": 7,
+      "title": "如何构建有力的论证：逻辑与说服的平衡",
+      "excerpt": "分享建立有说服力论证的方法，包括逻辑结构、证据运用和修辞技巧...",
+      "content": """
         <h1>如何构建有力的论证：逻辑与说服的平衡</h1>
         
         <p>一篇好的文章不仅要有好的想法，还要有强有力的论证。论证是连接论点和结论之间的桥梁，是说服读者的关键。</p>
@@ -480,16 +482,16 @@ const articlesData = {
         </ul>
         
         <p>好的论证是逻辑严密的，也是能够触动读者的内心的。掌握这个技巧，能让我们的文字更有影响力。</p>
-      `,
-      date: "2025-12-03",
-      tags: ["论证技巧", "逻辑", "说服力"],
-      category: "writing"
+      """,
+      "date": "2025-12-03",
+      "tags": ["论证技巧", "逻辑", "说服力"],
+      "category": "writing"
     },
     {
-      id: 8,
-      title: "叙事的艺术：让故事更引人入胜的方法",
-      excerpt: "探讨如何运用叙事技巧创造引人入胜的文章，包括情节设计、人物塑造和情感共鸣...",
-      content: `
+      "id": 8,
+      "title": "叙事的艺术：让故事更引人入胜的方法",
+      "excerpt": "探讨如何运用叙事技巧创造引人入胜的文章，包括情节设计、人物塑造和情感共鸣...",
+      "content": """
         <h1>叙事的艺术：让故事更引人入胜的方法</h1>
         
         <p>人类天生就是故事的动物。无论多么抽象的理念，一旦包装在故事中，就会变得生动有趣，容易理解和记忆。</p>
@@ -518,16 +520,16 @@ const articlesData = {
         </ol>
         
         <p>记住，最好的故事是那些能够启发思考、传递价值的真实故事。</p>
-      `,
-      date: "2025-12-02",
-      tags: ["叙事技巧", "故事", "文学"],
-      category: "writing"
+      """,
+      "date": "2025-12-02",
+      "tags": ["叙事技巧", "故事", "文学"],
+      "category": "writing"
     },
     {
-      id: 9,
-      title: "语言的力量：词汇选择与表达的精妙",
-      excerpt: "深入探讨词汇选择的艺术，以及如何通过精准的语言表达增强文章的影响力...",
-      content: `
+      "id": 9,
+      "title": "语言的力量：词汇选择与表达的精妙",
+      "excerpt": "深入探讨词汇选择的艺术，以及如何通过精准的语言表达增强文章的影响力...",
+      "content": """
         <h1>语言的力量：词汇选择与表达的精妙</h1>
         
         <p>语言不仅仅是交流的工具，更是思维的载体。每一个词汇的选择都承载着特定的含义和情感，准确的语言能够准确传达我们的思想，模糊的语言则会误导读者。</p>
@@ -556,16 +558,16 @@ const articlesData = {
         </ol>
         
         <p>好的语言就像精美的艺术品，既要美观，也要实用。它能够触动读者的心灵，传达深刻的思想。</p>
-      `,
-      date: "2025-11-30",
-      tags: ["语言技巧", "词汇", "表达"],
-      category: "writing"
+      """,
+      "date": "2025-11-30",
+      "tags": ["语言技巧", "词汇", "表达"],
+      "category": "writing"
     },
     {
-      id: 10,
-      title: "写作流程优化：从构思到完成的系统方法",
-      excerpt: "分享一套完整的写作流程，包括构思、提纲、起草、修改等各个环节的最佳实践...",
-      content: `
+      "id": 10,
+      "title": "写作流程优化：从构思到完成的系统方法",
+      "excerpt": "分享一套完整的写作流程，包括构思、提纲、起草、修改等各个环节的最佳实践...",
+      "content": """
         <h1>写作流程优化：从构思到完成的系统方法</h1>
         
         <p>写作不是一个线性的过程，而是一个循环往复的系统工程。通过建立标准化的写作流程，我们可以提高写作效率，保证文章质量。</p>
@@ -596,16 +598,16 @@ const articlesData = {
         </ul>
         
         <p>写作是一个需要耐心和毅力的过程，但通过系统化的方法，我们可以让这个过程更加高效和愉快。</p>
-      `,
-      date: "2025-11-27",
-      tags: ["写作流程", "效率", "方法论"],
-      category: "writing"
+      """,
+      "date": "2025-11-27",
+      "tags": ["写作流程", "效率", "方法论"],
+      "category": "writing"
     },
     {
-      id: 26,
-      title: "创意的源泉：如何激发和捕捉写作灵感",
-      excerpt: "探讨创意产生的机制，分享系统化的灵感收集和转化方法...",
-      content: `
+      "id": 26,
+      "title": "创意的源泉：如何激发和捕捉写作灵感",
+      "excerpt": "探讨创意产生的机制，分享系统化的灵感收集和转化方法...",
+      "content": """
         <h1>创意的源泉：如何激发和捕捉写作灵感</h1>
         
         <p>每个写作者都经历过灵感枯竭的时刻。灵感看似神秘不可控，但实际上有其规律可循。通过系统化的方法，我们可以主动激发创意，而不是被动等待灵感的降临。</p>
@@ -634,16 +636,16 @@ const articlesData = {
         </ol>
         
         <p>灵感需要培养和捕捉，通过系统化的方法，我们可以让创意成为写作的常态而非偶然。</p>
-      `,
-      date: "2025-12-06",
-      tags: ["创意", "灵感", "写作技巧"],
-      category: "writing"
+      """,
+      "date": "2025-12-06",
+      "tags": ["创意", "灵感", "写作技巧"],
+      "category": "writing"
     },
     {
-      id: 27,
-      title: "情感写作的艺术：用文字传递内心感受",
-      excerpt: "深入探讨如何在写作中表达真实情感，让读者产生共鸣...",
-      content: `
+      "id": 27,
+      "title": "情感写作的艺术：用文字传递内心感受",
+      "excerpt": "深入探讨如何在写作中表达真实情感，让读者产生共鸣...",
+      "content": """
         <h1>情感写作的艺术：用文字传递内心感受</h1>
         
         <p>好的写作不仅仅是信息的传递，更是情感的共鸣。能够在文字中注入真实的情感，让读者感同身受，这是写作的最高境界。</p>
@@ -681,16 +683,16 @@ const articlesData = {
         </ul>
         
         <p>情感写作的核心在于真诚，当我们真实地表达自己时，往往能触动读者内心最柔软的地方。</p>
-      `,
-      date: "2025-12-04",
-      tags: ["情感表达", "共鸣", "写作技巧"],
-      category: "writing"
+      """,
+      "date": "2025-12-04",
+      "tags": ["情感表达", "共鸣", "写作技巧"],
+      "category": "writing"
     },
     {
-      id: 28,
-      title: "商业写作指南：专业沟通的有效策略",
-      excerpt: "掌握职场和商务环境中的写作技巧，提升专业形象和沟通效果...",
-      content: `
+      "id": 28,
+      "title": "商业写作指南：专业沟通的有效策略",
+      "excerpt": "掌握职场和商务环境中的写作技巧，提升专业形象和沟通效果...",
+      "content": """
         <h1>商业写作指南：专业沟通的有效策略</h1>
         
         <p>商业写作与创意写作有很大不同，它更注重效率、清晰和专业性。在职场中，能够进行有效的商业写作是必备技能，它直接影响我们的工作效率和职业发展。</p>
@@ -729,16 +731,16 @@ const articlesData = {
         </ul>
         
         <p>商业写作的艺术在于既保持专业性，又确保沟通的有效性，让每一次写作都能推进工作目标的实现。</p>
-      `,
-      date: "2025-12-01",
-      tags: ["商业写作", "职场沟通", "专业技能"],
-      category: "writing"
+      """,
+      "date": "2025-12-01",
+      "tags": ["商业写作", "职场沟通", "专业技能"],
+      "category": "writing"
     },
     {
-      id: 29,
-      title: "编辑的艺术：如何让文字更加精炼有力",
-      excerpt: "分享编辑和修订的经验，探讨如何通过反复修改提升文章质量...",
-      content: `
+      "id": 29,
+      "title": "编辑的艺术：如何让文字更加精炼有力",
+      "excerpt": "分享编辑和修订的经验，探讨如何通过反复修改提升文章质量...",
+      "content": """
         <h1>编辑的艺术：如何让文字更加精炼有力</h1>
         
         <p>好文章是改出来的。第一次写出的文字往往只是原材料，通过精心编辑和反复修改，才能成为真正优秀的作品。编辑不仅是对文字的润色，更是对思想的深化。</p>
@@ -778,16 +780,16 @@ const articlesData = {
         </ul>
         
         <p>编辑是写作的重要组成部分，它体现了对读者的尊重和对质量的追求。</p>
-      `,
-      date: "2025-11-29",
-      tags: ["编辑技巧", "文章修改", "质量提升"],
-      category: "writing"
+      """,
+      "date": "2025-11-29",
+      "tags": ["编辑技巧", "文章修改", "质量提升"],
+      "category": "writing"
     },
     {
-      id: 30,
-      title: "叙事技巧深度解析：让故事更有吸引力",
-      excerpt: "探索叙事的核心技巧，学会构建引人入胜的故事结构...",
-      content: `
+      "id": 30,
+      "title": "叙事技巧深度解析：让故事更有吸引力",
+      "excerpt": "探索叙事的核心技巧，学会构建引人入胜的故事结构...",
+      "content": """
         <h1>叙事技巧深度解析：让故事更有吸引力</h1>
         
         <p>人类天生爱听故事，无论是商业演讲、个人经历还是产品介绍，故事化的表达都能让信息更容易被理解和记住。掌握叙事技巧是提升表达能力的重要途径。</p>
@@ -823,18 +825,18 @@ const articlesData = {
         </ul>
         
         <p>好的叙事不仅能够传递信息，更能够在读者心中留下深刻印象，产生情感共鸣。</p>
-      `,
-      date: "2025-11-25",
-      tags: ["叙事技巧", "故事结构", "表达艺术"],
-      category: "writing"
+      """,
+      "date": "2025-11-25",
+      "tags": ["叙事技巧", "故事结构", "表达艺术"],
+      "category": "writing"
     }
   ],
-  logic: [
+  "logic": [
     {
-      id: 11,
-      title: "逻辑思维的基础：如何避免常见的推理错误",
-      excerpt: "介绍逻辑思维的基本原理，分享识别和避免常见推理错误的方法...",
-      content: `
+      "id": 11,
+      "title": "逻辑思维的基础：如何避免常见的推理错误",
+      "excerpt": "介绍逻辑思维的基本原理，分享识别和避免常见推理错误的方法...",
+      "content": """
         <h1>逻辑思维的基础：如何避免常见的推理错误</h1>
         
         <p>逻辑思维是理性思考的基础，它帮助我们从纷繁复杂的信息中提取真相，做出正确的判断。在信息过载的时代，逻辑思维能力显得尤为重要。</p>
@@ -865,16 +867,16 @@ const articlesData = {
         </ul>
         
         <p>逻辑思维不是天生的，而是可以通过学习和练习培养的技能。</p>
-      `,
-      date: "2025-12-04",
-      tags: ["逻辑思维", "推理", "批判性思维"],
-      category: "logic"
+      """,
+      "date": "2025-12-04",
+      "tags": ["逻辑思维", "推理", "批判性思维"],
+      "category": "logic"
     },
     {
-      id: 12,
-      title: "系统思维：理解复杂问题的整体方法",
-      excerpt: "探讨系统思维的核心概念，学习如何从整体角度分析和解决复杂问题...",
-      content: `
+      "id": 12,
+      "title": "系统思维：理解复杂问题的整体方法",
+      "excerpt": "探讨系统思维的核心概念，学习如何从整体角度分析和解决复杂问题...",
+      "content": """
         <h1>系统思维：理解复杂问题的整体方法</h1>
         
         <p>世界是一个相互关联的复杂系统，任何问题都不是孤立存在的。系统思维帮助我们理解这些关联性，看到问题的全貌。</p>
@@ -903,16 +905,16 @@ const articlesData = {
         </ol>
         
         <p>系统思维让我们从"头痛医头"的线性思维转向"综合治理"的立体思维。</p>
-      `,
-      date: "2025-12-01",
-      tags: ["系统思维", "复杂性", "整体观"],
-      category: "logic"
+      """,
+      "date": "2025-12-01",
+      "tags": ["系统思维", "复杂性", "整体观"],
+      "category": "logic"
     },
     {
-      id: 13,
-      title: "批判性思维：质疑与验证的艺术",
-      excerpt: "培养批判性思维能力，学会质疑假设、验证证据，形成独立的判断...",
-      content: `
+      "id": 13,
+      "title": "批判性思维：质疑与验证的艺术",
+      "excerpt": "培养批判性思维能力，学会质疑假设、验证证据，形成独立的判断...",
+      "content": """
         <h1>批判性思维：质疑与验证的艺术</h1>
         
         <p>批判性思维不是质疑一切，而是基于证据和逻辑进行理性判断的能力。在信息泛滥的时代，这种能力可以帮助我们不被误导，形成独立的见解。</p>
@@ -940,16 +942,16 @@ const articlesData = {
         </ul>
         
         <p>批判性思维让我们在保持开放的同时，不被错误的观点所误导。</p>
-      `,
-      date: "2025-11-29",
-      tags: ["批判性思维", "验证", "独立思考"],
-      category: "logic"
+      """,
+      "date": "2025-11-29",
+      "tags": ["批判性思维", "验证", "独立思考"],
+      "category": "logic"
     },
     {
-      id: 14,
-      title: "问题分析：从现象到本质的思维路径",
-      excerpt: "学习问题分析的思维方法，从表面现象深入到根本原因...",
-      content: `
+      "id": 14,
+      "title": "问题分析：从现象到本质的思维路径",
+      "excerpt": "学习问题分析的思维方法，从表面现象深入到根本原因...",
+      "content": """
         <h1>问题分析：从现象到本质的思维路径</h1>
         
         <p>问题分析是逻辑思维的重要组成部分。有效的分析能够帮助我们找到问题的根本原因，而不是停留在表面现象上。</p>
@@ -981,16 +983,16 @@ const articlesData = {
         </ul>
         
         <p>好的问题分析不仅能找到原因，还能为解决方案提供指导。</p>
-      `,
-      date: "2025-11-26",
-      tags: ["问题分析", "因果关系", "方法论"],
-      category: "logic"
+      """,
+      "date": "2025-11-26",
+      "tags": ["问题分析", "因果关系", "方法论"],
+      "category": "logic"
     },
     {
-      id: 15,
-      title: "决策制定：在不确定性中做出最优选择",
-      excerpt: "探讨决策制定的思维框架，学会在信息不完整的情况下做出合理决策...",
-      content: `
+      "id": 15,
+      "title": "决策制定：在不确定性中做出最优选择",
+      "excerpt": "探讨决策制定的思维框架，学会在信息不完整的情况下做出合理决策...",
+      "content": """
         <h1>决策制定：在不确定性中做出最优选择</h1>
         
         <p>生活充满了选择，每个决策都可能影响我们的未来。学会制定好的决策是逻辑思维的重要应用。</p>
@@ -1019,16 +1021,16 @@ const articlesData = {
         </ul>
         
         <p>好的决策不是追求完美，而是在有限信息下做出最优选择。</p>
-      `,
-      date: "2025-11-23",
-      tags: ["决策", "风险管理", "分析"],
-      category: "logic"
+      """,
+      "date": "2025-11-23",
+      "tags": ["决策", "风险管理", "分析"],
+      "category": "logic"
     },
     {
-      id: 31,
-      title: "系统思维：理解复杂问题的整体视角",
-      excerpt: "介绍系统思维的核心概念，学习用整体视角分析和解决复杂问题...",
-      content: `
+      "id": 31,
+      "title": "系统思维：理解复杂问题的整体视角",
+      "excerpt": "介绍系统思维的核心概念，学习用整体视角分析和解决复杂问题...",
+      "content": """
         <h1>系统思维：理解复杂问题的整体视角</h1>
         
         <p>在复杂的世界中，单一视角往往无法理解问题的本质。系统思维提供了一种整体性的思考方式，帮助我们识别复杂问题中的相互关系和深层结构。</p>
@@ -1058,16 +1060,16 @@ const articlesData = {
         </ol>
         
         <p>系统思维教会我们不要孤立地看问题，而要在更大的背景下理解每个决策的复杂影响。</p>
-      `,
-      date: "2025-12-07",
-      tags: ["系统思维", "复杂性", "整体视角"],
-      category: "logic"
+      """,
+      "date": "2025-12-07",
+      "tags": ["系统思维", "复杂性", "整体视角"],
+      "category": "logic"
     },
     {
-      id: 32,
-      title: "概率思维：用数据指导决策的智慧",
-      excerpt: "探讨概率在日常生活和决策中的应用，学会用数据思维减少不确定性...",
-      content: `
+      "id": 32,
+      "title": "概率思维：用数据指导决策的智慧",
+      "excerpt": "探讨概率在日常生活和决策中的应用，学会用数据思维减少不确定性...",
+      "content": """
         <h1>概率思维：用数据指导决策的智慧</h1>
         
         <p>世界充满不确定性，但我们可以学会用概率思维来量化这种不确定性。概率不仅是一种数学工具，更是一种理性思考的方式。</p>
@@ -1097,16 +1099,16 @@ const articlesData = {
         </ol>
         
         <p>概率思维帮助我们在不确定的世界中做出更理性的决策，减少情绪化的判断偏差。</p>
-      `,
-      date: "2025-12-05",
-      tags: ["概率思维", "数据分析", "理性决策"],
-      category: "logic"
+      """,
+      "date": "2025-12-05",
+      "tags": ["概率思维", "数据分析", "理性决策"],
+      "category": "logic"
     },
     {
-      id: 33,
-      title: "批判性思维训练：质疑与分析的艺术",
-      excerpt: "分享批判性思维的培养方法，学会独立思考和理性判断...",
-      content: `
+      "id": 33,
+      "title": "批判性思维训练：质疑与分析的艺术",
+      "excerpt": "分享批判性思维的培养方法，学会独立思考和理性判断...",
+      "content": """
         <h1>批判性思维训练：质疑与分析的艺术</h1>
         
         <p>在信息爆炸的时代，我们每天都被各种观点和信息包围。批判性思维帮助我们区分真相与谬误，形成独立的判断，不被表面现象和权威观点所误导。</p>
@@ -1146,16 +1148,16 @@ const articlesData = {
         </ul>
         
         <p>批判性思维不是怀疑一切，而是用理性和证据来支撑我们的信念。</p>
-      `,
-      date: "2025-12-02",
-      tags: ["批判性思维", "质疑", "理性判断"],
-      category: "logic"
+      """,
+      "date": "2025-12-02",
+      "tags": ["批判性思维", "质疑", "理性判断"],
+      "category": "logic"
     },
     {
-      id: 34,
-      title: "因果关系的识别：避免相关性与因果性的混淆",
-      excerpt: "深入探讨如何正确识别因果关系，防范统计陷阱和逻辑错误...",
-      content: `
+      "id": 34,
+      "title": "因果关系的识别：避免相关性与因果性的混淆",
+      "excerpt": "深入探讨如何正确识别因果关系，防范统计陷阱和逻辑错误...",
+      "content": """
         <h1>因果关系的识别：避免相关性与因果性的混淆</h1>
         
         <p>人类大脑天生善于寻找模式，但也容易将表面的关联误认为因果关系。在科学研究和日常生活中，正确识别因果关系是做出正确判断的关键。</p>
@@ -1192,16 +1194,16 @@ const articlesData = {
         </ul>
         
         <p>在日常生活中，当我们看到相关性时，应该保持谨慎，思考是否存在合理的因果机制。</p>
-      `,
-      date: "2025-11-30",
-      tags: ["因果关系", "统计分析", "科学思维"],
-      category: "logic"
+      """,
+      "date": "2025-11-30",
+      "tags": ["因果关系", "统计分析", "科学思维"],
+      "category": "logic"
     },
     {
-      id: 35,
-      title: "复杂性科学：理解非线性世界的思维方式",
-      excerpt: "探索复杂性科学的基本概念，学习应对复杂系统的思维方法...",
-      content: `
+      "id": 35,
+      "title": "复杂性科学：理解非线性世界的思维方式",
+      "excerpt": "探索复杂性科学的基本概念，学习应对复杂系统的思维方法...",
+      "content": """
         <h1>复杂性科学：理解非线性世界的思维方式</h1>
         
         <p>许多现实世界的问题都具有复杂系统的特征：非线性、涌现性、适应性。复杂性科学提供了一套新的思维工具，帮助我们理解和应对这些挑战。</p>
@@ -1237,18 +1239,18 @@ const articlesData = {
         <strong>演化思维</strong>：用进化视角理解变化</p>
         
         <p>复杂性思维教会我们在不确定性中寻找确定性，在混乱中建立秩序。</p>
-      `,
-      date: "2025-11-27",
-      tags: ["复杂性科学", "系统思维", "非线性"],
-      category: "logic"
+      """,
+      "date": "2025-11-27",
+      "tags": ["复杂性科学", "系统思维", "非线性"],
+      "category": "logic"
     }
   ],
-  speech: [
+  "speech": [
     {
-      id: 16,
-      title: "有效沟通的心理学原理：理解与被理解的艺术",
-      excerpt: "探讨沟通背后的心理学机制，学习如何建立有效的沟通桥梁...",
-      content: `
+      "id": 16,
+      "title": "有效沟通的心理学原理：理解与被理解的艺术",
+      "excerpt": "探讨沟通背后的心理学机制，学习如何建立有效的沟通桥梁...",
+      "content": """
         <h1>有效沟通的心理学原理：理解与被理解的艺术</h1>
         
         <p>沟通不仅仅是信息的传递，更是情感的交流和思想的碰撞。理解沟通的心理学原理，可以帮助我们建立更深层次的理解和连接。</p>
@@ -1277,16 +1279,16 @@ const articlesData = {
         </ol>
         
         <p>真正的沟通是心与心的交流，而不仅仅是信息的交换。</p>
-      `,
-      date: "2025-12-06",
-      tags: ["沟通技巧", "心理学", "人际关系"],
-      category: "speech"
+      """,
+      "date": "2025-12-06",
+      "tags": ["沟通技巧", "心理学", "人际关系"],
+      "category": "speech"
     },
     {
-      id: 17,
-      title: "演讲艺术：如何让话语产生影响力",
-      excerpt: "分享演讲的核心技巧，包括内容准备、表达技巧和现场控制...",
-      content: `
+      "id": 17,
+      "title": "演讲艺术：如何让话语产生影响力",
+      "excerpt": "分享演讲的核心技巧，包括内容准备、表达技巧和现场控制...",
+      "content": """
         <h1>演讲艺术：如何让话语产生影响力</h1>
         
         <p>演讲是一种独特的艺术形式，它要求我们在有限的时间内，通过语言的力量触动听众的心灵，传达深刻的观点。</p>
@@ -1319,16 +1321,16 @@ const articlesData = {
         </ul>
         
         <p>好的演讲能够改变听众的想法，激励他们采取行动。</p>
-      `,
-      date: "2025-12-04",
-      tags: ["演讲技巧", "表达", "影响力"],
-      category: "speech"
+      """,
+      "date": "2025-12-04",
+      "tags": ["演讲技巧", "表达", "影响力"],
+      "category": "speech"
     },
     {
-      id: 18,
-      title: "谈判艺术：在冲突中寻找共赢的解决方案",
-      excerpt: "探索谈判的心理学和策略，学习在利益冲突中达成双赢的结果...",
-      content: `
+      "id": 18,
+      "title": "谈判艺术：在冲突中寻找共赢的解决方案",
+      "excerpt": "探索谈判的心理学和策略，学习在利益冲突中达成双赢的结果...",
+      "content": """
         <h1>谈判艺术：在冲突中寻找共赢的解决方案</h1>
         
         <p>谈判是沟通的高级形式，它涉及利益的分配和关系的维护。优秀的谈判者能够在维护自己利益的同时，也照顾到对方的需要。</p>
@@ -1366,16 +1368,16 @@ const articlesData = {
         </ul>
         
         <p>最好的谈判结果是让双方都感到满意和公平。</p>
-      `,
-      date: "2025-12-02",
-      tags: ["谈判技巧", "冲突解决", "合作"],
-      category: "speech"
+      """,
+      "date": "2025-12-02",
+      "tags": ["谈判技巧", "冲突解决", "合作"],
+      "category": "speech"
     },
     {
-      id: 19,
-      title: "说服技巧：影响他人思想的策略与伦理",
-      excerpt: "研究说服的心理学原理，学习如何以道德的方式影响他人的观点和行为...",
-      content: `
+      "id": 19,
+      "title": "说服技巧：影响他人思想的策略与伦理",
+      "excerpt": "研究说服的心理学原理，学习如何以道德的方式影响他人的观点和行为...",
+      "content": """
         <h1>说服技巧：影响他人思想的策略与伦理</h1>
         
         <p>说服是一种艺术，也是一种责任。优秀的说服者能够改变他人的想法，但同时也要考虑道德和伦理的界限。</p>
@@ -1413,16 +1415,16 @@ const articlesData = {
         </ul>
         
         <p>真正的说服是启发思考，而不是操控意志。</p>
-      `,
-      date: "2025-11-30",
-      tags: ["说服技巧", "影响力", "伦理"],
-      category: "speech"
+      """,
+      "date": "2025-11-30",
+      "tags": ["说服技巧", "影响力", "伦理"],
+      "category": "speech"
     },
     {
-      id: 20,
-      title: "跨文化沟通：理解差异，消除误解",
-      excerpt: "探讨跨文化沟通的挑战和机遇，学习如何在不同文化背景下进行有效交流...",
-      content: `
+      "id": 20,
+      "title": "跨文化沟通：理解差异，消除误解",
+      "excerpt": "探讨跨文化沟通的挑战和机遇，学习如何在不同文化背景下进行有效交流...",
+      "content": """
         <h1>跨文化沟通：理解差异，消除误解</h1>
         
         <p>在全球化的今天，跨文化沟通能力越来越重要。不同文化背景下的人们有着不同的价值观、沟通习惯和思维模式，理解这些差异是成功沟通的基础。</p>
@@ -1461,16 +1463,16 @@ const articlesData = {
         </ul>
         
         <p>跨文化沟通不仅是一种技能，更是一种尊重和包容的态度。</p>
-      `,
-      date: "2025-11-28",
-      tags: ["跨文化沟通", "文化差异", "全球化"],
-      category: "speech"
+      """,
+      "date": "2025-11-28",
+      "tags": ["跨文化沟通", "文化差异", "全球化"],
+      "category": "speech"
     },
     {
-      id: 36,
-      title: "非言语沟通：身体语言的深层含义",
-      excerpt: "探索非言语信号在沟通中的作用，学习解读和运用身体语言...",
-      content: `
+      "id": 36,
+      "title": "非言语沟通：身体语言的深层含义",
+      "excerpt": "探索非言语信号在沟通中的作用，学习解读和运用身体语言...",
+      "content": """
         <h1>非言语沟通：身体语言的深层含义</h1>
         
         <p>研究表明，沟通中55%的信息通过身体语言传递，38%通过语调，只有7%通过文字内容。非言语沟通是沟通的重要组成部分，它往往比言语更能反映真实的情感和态度。</p>
@@ -1510,16 +1512,16 @@ const articlesData = {
         </ol>
         
         <p>掌握非言语沟通技巧能够显著提升我们的表达效果和沟通效率。</p>
-      `,
-      date: "2025-12-06",
-      tags: ["非言语沟通", "身体语言", "表情管理"],
-      category: "speech"
+      """,
+      "date": "2025-12-06",
+      "tags": ["非言语沟通", "身体语言", "表情管理"],
+      "category": "speech"
     },
     {
-      id: 37,
-      title: "说服心理学：影响他人的科学原理",
-      excerpt: "深入探讨说服的科学原理，学习运用心理学原理进行有效说服...",
-      content: `
+      "id": 37,
+      "title": "说服心理学：影响他人的科学原理",
+      "excerpt": "深入探讨说服的科学原理，学习运用心理学原理进行有效说服...",
+      "content": """
         <h1>说服心理学：影响他人的科学原理</h1>
         
         <p>说服是一种艺术，也是一门科学。了解说服的心理学原理能够帮助我们在不损害他人利益的前提下，更好地传达观点和影响决策。</p>
@@ -1563,16 +1565,16 @@ const articlesData = {
         </ul>
         
         <p>有效的说服应该是双赢的，既实现自己的目标，也帮助对方做出更好的决策。</p>
-      `,
-      date: "2025-12-03",
-      tags: ["说服技巧", "心理学", "影响力"],
-      category: "speech"
+      """,
+      "date": "2025-12-03",
+      "tags": ["说服技巧", "心理学", "影响力"],
+      "category": "speech"
     },
     {
-      id: 38,
-      title: "冲突管理与谈判技巧：化解分歧的艺术",
-      excerpt: "学习冲突的成因和处理方法，掌握建设性的谈判技巧...",
-      content: `
+      "id": 38,
+      "title": "冲突管理与谈判技巧：化解分歧的艺术",
+      "excerpt": "学习冲突的成因和处理方法，掌握建设性的谈判技巧...",
+      "content": """
         <h1>冲突管理与谈判技巧：化解分歧的艺术</h1>
         
         <p>冲突是生活中不可避免的现象，关键在于如何处理冲突。建设性的冲突处理不仅能解决问题，还能促进关系的发展和个人成长。</p>
@@ -1617,16 +1619,16 @@ const articlesData = {
         </ul>
         
         <p>有效的冲突处理能够将分歧转化为创新和改进的机会。</p>
-      `,
-      date: "2025-11-30",
-      tags: ["冲突管理", "谈判技巧", "人际关系"],
-      category: "speech"
+      """,
+      "date": "2025-11-30",
+      "tags": ["冲突管理", "谈判技巧", "人际关系"],
+      "category": "speech"
     },
     {
-      id: 39,
-      title: "公众演讲的艺术：从恐惧到自信的蜕变",
-      excerpt: "分享克服演讲恐惧的方法，掌握专业演讲的技巧和策略...",
-      content: `
+      "id": 39,
+      "title": "公众演讲的艺术：从恐惧到自信的蜕变",
+      "excerpt": "分享克服演讲恐惧的方法，掌握专业演讲的技巧和策略...",
+      "content": """
         <h1>公众演讲的艺术：从恐惧到自信的蜕变</h1>
         
         <p>公众演讲被列为人类最恐惧的事情之一，但同时也是最有影响力的技能之一。通过系统的学习和练习，每个人都能掌握公众演讲的艺术。</p>
@@ -1668,16 +1670,16 @@ const articlesData = {
         <strong>娱乐演讲</strong>：通过幽默和故事娱乐听众</p>
         
         <p>公众演讲不仅是一种技能，更是一种传递价值和影响力的重要方式。</p>
-      `,
-      date: "2025-11-27",
-      tags: ["公众演讲", "演讲技巧", "自信表达"],
-      category: "speech"
+      """,
+      "date": "2025-11-27",
+      "tags": ["公众演讲", "演讲技巧", "自信表达"],
+      "category": "speech"
     },
     {
-      id: 40,
-      title: "数字时代的沟通：线上与线下的融合策略",
-      excerpt: "探讨数字时代沟通方式的变迁，学会在多渠道环境中有效沟通...",
-      content: `
+      "id": 40,
+      "title": "数字时代的沟通：线上与线下的融合策略",
+      "excerpt": "探讨数字时代沟通方式的变迁，学会在多渠道环境中有效沟通...",
+      "content": """
         <h1>数字时代的沟通：线上与线下的融合策略</h1>
         
         <p>数字技术彻底改变了我们的沟通方式。从面对面交流到虚拟会议，从即时消息到社交媒体，我们需要掌握多种沟通渠道，并在不同场景下选择最适合的沟通方式。</p>
@@ -1722,420 +1724,105 @@ const articlesData = {
         <strong>关系维护</strong>：在线下建立关系后通过线上保持联系</p>
         
         <p>数字时代的沟通艺术在于灵活运用各种渠道，根据具体情况选择最合适的沟通方式。</p>
-      `,
-      date: "2025-11-24",
-      tags: ["数字沟通", "线上线下", "多渠道沟通"],
-      category: "speech"
+      """,
+      "date": "2025-11-24",
+      "tags": ["数字沟通", "线上线下", "多渠道沟通"],
+      "category": "speech"
     }
   ]
-};
-
-// 全局变量
-let currentTab = 'home';
-
-// DOM加载完成后初始化
-document.addEventListener('DOMContentLoaded', function() {
-  initializeApp();
-});
-
-// 初始化应用
-function initializeApp() {
-  initNavigation();
-  initMobileMenu();
-  initModal();
-  initArticleView();
-  renderLatestArticles();
-  renderArticlesByCategory();
-  initScrollAnimations();
-  initializeIcons();
 }
 
-// 初始化导航
-function initNavigation() {
-  const navLinks = document.querySelectorAll('.nav-link');
-  const mobileLinks = document.querySelectorAll('.mobile-link');
-  
-  // 桌面端导航
-  navLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const tab = this.getAttribute('data-tab');
-      switchTab(tab);
-    });
-  });
-  
-  // 移动端导航
-  mobileLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const tab = this.getAttribute('data-tab');
-      switchTab(tab);
-      closeMobileMenu();
-    });
-  });
-}
+# 将HTML内容转换为Markdown格式
+def html_to_markdown(html):
+    markdown = html
+    
+    # 转换标题
+    markdown = re.sub(r'<h1[^>]*>(.*?)</h1>', r'# \1\n\n', markdown)
+    markdown = re.sub(r'<h2[^>]*>(.*?)</h2>', r'## \1\n\n', markdown)
+    markdown = re.sub(r'<h3[^>]*>(.*?)</h3>', r'### \1\n\n', markdown)
+    markdown = re.sub(r'<h4[^>]*>(.*?)</h4>', r'#### \1\n\n', markdown)
+    markdown = re.sub(r'<h5[^>]*>(.*?)</h5>', r'##### \1\n\n', markdown)
+    markdown = re.sub(r'<h6[^>]*>(.*?)</h6>', r'###### \1\n\n', markdown)
+    
+    # 转换段落
+    markdown = re.sub(r'<p[^>]*>(.*?)</p>', r'\1\n\n', markdown)
+    
+    # 转换有序列表
+    markdown = re.sub(r'<ol[^>]*>([\s\S]*?)</ol>', lambda m: convert_ordered_list(m.group(1)), markdown)
+    
+    # 转换无序列表
+    markdown = re.sub(r'<ul[^>]*>([\s\S]*?)</ul>', lambda m: convert_unordered_list(m.group(1)), markdown)
+    
+    # 转换强调
+    markdown = re.sub(r'<strong[^>]*>(.*?)</strong>', r'**\1**', markdown)
+    markdown = re.sub(r'<b[^>]*>(.*?)</b>', r'**\1**', markdown)
+    markdown = re.sub(r'<em[^>]*>(.*?)</em>', r'*\1*', markdown)
+    markdown = re.sub(r'<i[^>]*>(.*?)</i>', r'*\1*', markdown)
+    
+    # 转换换行
+    markdown = re.sub(r'<br[^>]*>', '\n', markdown)
+    
+    # 移除剩余的HTML标签
+    markdown = re.sub(r'<[^>]*>', '', markdown)
+    
+    # 清理多余的空行
+    markdown = re.sub(r'\n{3,}', '\n\n', markdown)
+    
+    # 清理首尾空白
+    markdown = markdown.strip()
+    
+    return markdown
 
-// 切换标签页
-function switchTab(tabName) {
-  // 隐藏所有内容区域
-  const sections = document.querySelectorAll('.content-section');
-  sections.forEach(section => {
-    section.classList.remove('active');
-  });
-  
-  // 隐藏文章视图
-  const articleView = document.getElementById('articleView');
-  if (articleView) {
-    articleView.style.opacity = '0';
-    articleView.style.visibility = 'hidden';
-    articleView.style.transform = 'translateY(20px)';
-  }
-  
-  // 显示目标区域
-  const targetSection = document.getElementById(tabName);
-  if (targetSection) {
-    // 如果是文章视图，添加过渡效果
-    if (tabName === 'articleView') {
-      // 使用requestAnimationFrame确保过渡效果更流畅
-      requestAnimationFrame(() => {
-        targetSection.style.opacity = '1';
-        targetSection.style.visibility = 'visible';
-        targetSection.style.transform = 'translateY(0)';
-      });
-    } else {
-      targetSection.classList.add('active');
-    }
-  }
-  
-  // 更新导航状态
-  updateNavigationState(tabName);
-  
-  // 更新当前标签
-  currentTab = tabName;
-  
-  // 滚动到顶部
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+def convert_ordered_list(content):
+    index = 1
+    def replace_li(match):
+        nonlocal index
+        result = f"{index}. {match.group(1)}\n"
+        index += 1
+        return result
+    
+    return re.sub(r'<li[^>]*>(.*?)</li>', replace_li, content)
 
-// 更新导航状态
-function updateNavigationState(activeTab) {
-  // 桌面端导航
-  const navLinks = document.querySelectorAll('.nav-link');
-  navLinks.forEach(link => {
-    link.classList.remove('active');
-    if (link.getAttribute('data-tab') === activeTab) {
-      link.classList.add('active');
-    }
-  });
-  
-  // 移动端导航
-  const mobileLinks = document.querySelectorAll('.mobile-link');
-  mobileLinks.forEach(link => {
-    link.classList.remove('active');
-    if (link.getAttribute('data-tab') === activeTab) {
-      link.classList.add('active');
-    }
-  });
-}
+def convert_unordered_list(content):
+    return re.sub(r'<li[^>]*>(.*?)</li>', r'- \1\n', content)
 
-// 初始化移动端菜单
-function initMobileMenu() {
-  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-  const mobileMenu = document.getElementById('mobileMenu');
-  
-  if (mobileMenuBtn && mobileMenu) {
-    mobileMenuBtn.addEventListener('click', function() {
-      mobileMenu.classList.toggle('active');
-    });
-  }
-}
-
-// 关闭移动端菜单
-function closeMobileMenu() {
-  const mobileMenu = document.getElementById('mobileMenu');
-  if (mobileMenu) {
-    mobileMenu.classList.remove('active');
-  }
-}
-
-// 初始化文章视图
-function initArticleView() {
-  const backButton = document.getElementById('backButton');
-  
-  if (backButton) {
-    backButton.addEventListener('click', function() {
-      // 添加点击反馈
-      this.style.transform = 'scale(0.95)';
-      setTimeout(() => {
-        this.style.transform = 'scale(1)';
-      }, 150);
-      
-      // 返回到之前的页面
-      const previousTab = localStorage.getItem('previousTab') || 'home';
-      
-      // 先隐藏文章视图
-      const articleView = document.getElementById('articleView');
-      if (articleView) {
-        articleView.style.opacity = '0';
-        articleView.style.visibility = 'hidden';
-        articleView.style.transform = 'translateY(20px)';
+# 为每篇文章创建Markdown文件
+def create_markdown_files():
+    base_dir = Path("articles")
+    
+    for category, articles in articlesData.items():
+        category_dir = base_dir / category
+        category_dir.mkdir(parents=True, exist_ok=True)
         
-        // 延迟切换到目标页面
-        setTimeout(() => {
-          switchTab(previousTab);
-          // 重新初始化图标，因为返回后可能需要重新渲染
-          setTimeout(() => {
-            initializeIcons();
-          }, 100);
-        }, 200);
-      }
-    });
-  }
-}
+        for article in articles:
+            # 创建文件名（使用标题的简化版本）
+            safe_title = re.sub(r'[^\w\u4e00-\u9fa5]', '_', article["title"])
+            file_name = f"{article['id']}-{safe_title}.md"
+            file_path = category_dir / file_name
+            
+            # 转换内容为Markdown格式
+            markdown_content = html_to_markdown(article["content"])
+            
+            # 创建完整的Markdown文件内容
+            full_content = f"""---
+title: "{article['title']}"
+excerpt: "{article['excerpt']}"
+date: {article['date']}
+tags: [{', '.join([f'"{tag}"' for tag in article['tags']])}]
+category: {article['category']}
+id: {article['id']}
+---
 
-// 打开文章详情页面
-function openArticleView(articleId) {
-  const article = findArticleById(articleId);
-  if (!article) return;
-  
-  // 保存当前标签页
-  localStorage.setItem('previousTab', currentTab);
-  
-  // 填充文章内容
-  const articleTitle = document.getElementById('articleTitle');
-  const articleBody = document.getElementById('articleBody');
-  const articleCategory = document.getElementById('articleCategory');
-  const articleDate = document.getElementById('articleDate');
-  const articleTags = document.getElementById('articleTags');
-  
-  if (articleTitle) {
-    articleTitle.textContent = article.title;
-  }
-  
-  if (articleBody) {
-    // 移除文章内容中的h1标题，避免重复显示
-    const contentWithoutH1 = article.content.replace(/<h1[^>]*>.*?<\/h1>/gi, '');
-    articleBody.innerHTML = contentWithoutH1;
-  }
-  
-  if (articleCategory) {
-    articleCategory.textContent = getCategoryName(article.category);
-    articleCategory.className = `article-category ${article.category}`;
-  }
-  
-  if (articleDate) {
-    articleDate.textContent = formatDate(article.date);
-  }
-  
-  if (articleTags) {
-    articleTags.innerHTML = article.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
-  }
-  
-  // 切换到文章视图
-  switchTab('articleView');
-  
-  // 滚动到顶部
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  
-  // 重新初始化图标
-  setTimeout(() => {
-    initializeIcons();
-  }, 100);
-}
+# {article['title']}
 
-// 保留原有的模态框函数以备后用
-function initModal() {
-  const modal = document.getElementById('articleModal');
-  const modalClose = document.getElementById('modalClose');
-  
-  if (modalClose) {
-    modalClose.addEventListener('click', closeModal);
-  }
-  
-  // 点击模态框外部关闭
-  if (modal) {
-    modal.addEventListener('click', function(e) {
-      if (e.target === modal) {
-        closeModal();
-      }
-    });
-  }
-}
+{markdown_content}"""
+            
+            # 写入文件
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(full_content)
+            print(f"Created file: {file_path}")
 
-// 打开文章模态框
-function openArticleModal(articleId) {
-  const article = findArticleById(articleId);
-  if (!article) return;
-  
-  const modal = document.getElementById('articleModal');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalBody = document.getElementById('modalBody');
-  
-  if (modalTitle && modalBody) {
-    modalTitle.textContent = article.title;
-    modalBody.innerHTML = article.content;
-  }
-  
-  if (modal) {
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-}
-
-// 关闭模态框
-function closeModal() {
-  const modal = document.getElementById('articleModal');
-  if (modal) {
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
-  }
-}
-
-// 根据ID查找文章
-function findArticleById(id) {
-  for (const category in articlesData) {
-    const article = articlesData[category].find(item => item.id === id);
-    if (article) return article;
-  }
-  return null;
-}
-
-// 渲染最新文章
-function renderLatestArticles() {
-  const container = document.getElementById('latestArticles');
-  if (!container) return;
-  
-  // 获取所有文章并按日期排序
-  const allArticles = [];
-  for (const category in articlesData) {
-    allArticles.push(...articlesData[category]);
-  }
-  
-  // 按日期降序排列，取前10篇
-  const latestArticles = allArticles
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
-    .slice(0, 10);
-  
-  container.innerHTML = latestArticles.map(article => createArticleCard(article)).join('');
-}
-
-// 渲染分类文章
-function renderArticlesByCategory() {
-  Object.keys(articlesData).forEach(category => {
-    const container = document.getElementById(`${category}Articles`);
-    if (container) {
-      container.innerHTML = articlesData[category].map(article => createArticleCard(article)).join('');
-    }
-  });
-}
-
-// 提取文章内容的前面部分用于预览
-function extractArticlePreview(content, maxLength = 75) {
-  // 创建一个临时div来解析HTML
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = content;
-  
-  // 移除h1标题
-  const h1Elements = tempDiv.querySelectorAll('h1');
-  h1Elements.forEach(h1 => h1.remove());
-  
-  // 获取纯文本内容
-  let textContent = tempDiv.textContent || tempDiv.innerText || '';
-  
-  // 清理多余的空白字符
-  textContent = textContent.replace(/\s+/g, ' ').trim();
-  
-  // 截取指定长度
-  if (textContent.length > maxLength) {
-    textContent = textContent.substring(0, maxLength) + '...';
-  }
-  
-  return textContent;
-}
-
-// 创建文章卡片
-function createArticleCard(article) {
-  // 从文章内容中提取预览文本
-  const contentPreview = extractArticlePreview(article.content);
-  
-  return `
-    <div class="article-card" onclick="openArticleView(${article.id})">
-      <div class="article-meta">
-        <span class="article-category ${article.category}">${getCategoryName(article.category)}</span>
-        <span class="article-date">${formatDate(article.date)}</span>
-      </div>
-      <h3 class="article-title">${article.title}</h3>
-      <p class="article-excerpt">${contentPreview}</p>
-      <div class="article-footer">
-        <div class="article-tags">
-          ${article.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-// 获取分类名称
-function getCategoryName(category) {
-  const categoryNames = {
-    reading: '阅读',
-    writing: '写作',
-    logic: '逻辑',
-    speech: '言语'
-  };
-  return categoryNames[category] || category;
-}
-
-// 格式化日期
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-}
-
-// 滚动到指定区域
-function scrollToSection(sectionId) {
-  const section = document.getElementById(sectionId);
-  if (section) {
-    section.scrollIntoView({ behavior: 'smooth' });
-  }
-}
-
-// 初始化滚动动画
-function initScrollAnimations() {
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  };
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, observerOptions);
-  
-  // 观察文章卡片
-  const articleCards = document.querySelectorAll('.article-card');
-  articleCards.forEach(card => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(30px)';
-    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(card);
-  });
-}
-
-// 初始化Lucide图标
-function initializeIcons() {
-  if (typeof lucide !== 'undefined') {
-    lucide.createIcons();
-  }
-}
-
-// 页面加载完成后初始化图标
-window.addEventListener('load', initializeIcons);
+# 执行函数
+if __name__ == "__main__":
+    create_markdown_files()
+    print("All markdown files have been created successfully!")

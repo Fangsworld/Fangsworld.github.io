@@ -1,6 +1,7 @@
-// ===== 宇文平野个人网站交互脚本 =====
+const fs = require('fs');
+const path = require('path');
 
-// 文章数据
+// 从app.js中提取的文章数据
 const articlesData = {
   reading: [
     {
@@ -1730,412 +1731,91 @@ const articlesData = {
   ]
 };
 
-// 全局变量
-let currentTab = 'home';
-
-// DOM加载完成后初始化
-document.addEventListener('DOMContentLoaded', function() {
-  initializeApp();
-});
-
-// 初始化应用
-function initializeApp() {
-  initNavigation();
-  initMobileMenu();
-  initModal();
-  initArticleView();
-  renderLatestArticles();
-  renderArticlesByCategory();
-  initScrollAnimations();
-  initializeIcons();
-}
-
-// 初始化导航
-function initNavigation() {
-  const navLinks = document.querySelectorAll('.nav-link');
-  const mobileLinks = document.querySelectorAll('.mobile-link');
+// 将HTML内容转换为Markdown格式
+function htmlToMarkdown(html) {
+  let markdown = html;
   
-  // 桌面端导航
-  navLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const tab = this.getAttribute('data-tab');
-      switchTab(tab);
+  // 转换标题
+  markdown = markdown.replace(/<h1[^>]*>(.*?)<\/h1>/g, '# $1\n\n');
+  markdown = markdown.replace(/<h2[^>]*>(.*?)<\/h2>/g, '## $1\n\n');
+  markdown = markdown.replace(/<h3[^>]*>(.*?)<\/h3>/g, '### $1\n\n');
+  markdown = markdown.replace(/<h4[^>]*>(.*?)<\/h4>/g, '#### $1\n\n');
+  markdown = markdown.replace(/<h5[^>]*>(.*?)<\/h5>/g, '##### $1\n\n');
+  markdown = markdown.replace(/<h6[^>]*>(.*?)<\/h6>/g, '###### $1\n\n');
+  
+  // 转换段落
+  markdown = markdown.replace(/<p[^>]*>(.*?)<\/p>/g, '$1\n\n');
+  
+  // 转换列表
+  markdown = markdown.replace(/<ol[^>]*>([\s\S]*?)<\/ol>/g, (match, content) => {
+    let index = 1;
+    return content.replace(/<li[^>]*>(.*?)<\/li>/g, () => {
+      return `${index++}. $1\n`;
     });
   });
   
-  // 移动端导航
-  mobileLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const tab = this.getAttribute('data-tab');
-      switchTab(tab);
-      closeMobileMenu();
-    });
-  });
-}
-
-// 切换标签页
-function switchTab(tabName) {
-  // 隐藏所有内容区域
-  const sections = document.querySelectorAll('.content-section');
-  sections.forEach(section => {
-    section.classList.remove('active');
+  markdown = markdown.replace(/<ul[^>]*>([\s\S]*?)<\/ul>/g, (match, content) => {
+    return content.replace(/<li[^>]*>(.*?)<\/li>/g, '- $1\n');
   });
   
-  // 隐藏文章视图
-  const articleView = document.getElementById('articleView');
-  if (articleView) {
-    articleView.style.opacity = '0';
-    articleView.style.visibility = 'hidden';
-    articleView.style.transform = 'translateY(20px)';
-  }
+  // 转换强调
+  markdown = markdown.replace(/<strong[^>]*>(.*?)<\/strong>/g, '**$1**');
+  markdown = markdown.replace(/<b[^>]*>(.*?)<\/b>/g, '**$1**');
+  markdown = markdown.replace(/<em[^>]*>(.*?)<\/em>/g, '*$1*');
+  markdown = markdown.replace(/<i[^>]*>(.*?)<\/i>/g, '*$1*');
   
-  // 显示目标区域
-  const targetSection = document.getElementById(tabName);
-  if (targetSection) {
-    // 如果是文章视图，添加过渡效果
-    if (tabName === 'articleView') {
-      // 使用requestAnimationFrame确保过渡效果更流畅
-      requestAnimationFrame(() => {
-        targetSection.style.opacity = '1';
-        targetSection.style.visibility = 'visible';
-        targetSection.style.transform = 'translateY(0)';
-      });
-    } else {
-      targetSection.classList.add('active');
-    }
-  }
+  // 转换换行
+  markdown = markdown.replace(/<br[^>]*>/g, '\n');
   
-  // 更新导航状态
-  updateNavigationState(tabName);
+  // 移除剩余的HTML标签
+  markdown = markdown.replace(/<[^>]*>/g, '');
   
-  // 更新当前标签
-  currentTab = tabName;
+  // 清理多余的空行
+  markdown = markdown.replace(/\n{3,}/g, '\n\n');
   
-  // 滚动到顶部
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // 清理首尾空白
+  markdown = markdown.trim();
+  
+  return markdown;
 }
 
-// 更新导航状态
-function updateNavigationState(activeTab) {
-  // 桌面端导航
-  const navLinks = document.querySelectorAll('.nav-link');
-  navLinks.forEach(link => {
-    link.classList.remove('active');
-    if (link.getAttribute('data-tab') === activeTab) {
-      link.classList.add('active');
-    }
-  });
+// 为每篇文章创建Markdown文件
+function createMarkdownFiles() {
+  const categories = Object.keys(articlesData);
   
-  // 移动端导航
-  const mobileLinks = document.querySelectorAll('.mobile-link');
-  mobileLinks.forEach(link => {
-    link.classList.remove('active');
-    if (link.getAttribute('data-tab') === activeTab) {
-      link.classList.add('active');
-    }
-  });
-}
-
-// 初始化移动端菜单
-function initMobileMenu() {
-  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-  const mobileMenu = document.getElementById('mobileMenu');
-  
-  if (mobileMenuBtn && mobileMenu) {
-    mobileMenuBtn.addEventListener('click', function() {
-      mobileMenu.classList.toggle('active');
-    });
-  }
-}
-
-// 关闭移动端菜单
-function closeMobileMenu() {
-  const mobileMenu = document.getElementById('mobileMenu');
-  if (mobileMenu) {
-    mobileMenu.classList.remove('active');
-  }
-}
-
-// 初始化文章视图
-function initArticleView() {
-  const backButton = document.getElementById('backButton');
-  
-  if (backButton) {
-    backButton.addEventListener('click', function() {
-      // 添加点击反馈
-      this.style.transform = 'scale(0.95)';
-      setTimeout(() => {
-        this.style.transform = 'scale(1)';
-      }, 150);
+  categories.forEach(category => {
+    const articles = articlesData[category];
+    
+    articles.forEach(article => {
+      // 创建文件名（使用标题的简化版本）
+      const fileName = `${article.id}-${article.title.replace(/[^\w\u4e00-\u9fa5]/g, '_')}.md`;
+      const filePath = path.join(__dirname, 'articles', category, fileName);
       
-      // 返回到之前的页面
-      const previousTab = localStorage.getItem('previousTab') || 'home';
+      // 转换内容为Markdown格式
+      const markdownContent = htmlToMarkdown(article.content);
       
-      // 先隐藏文章视图
-      const articleView = document.getElementById('articleView');
-      if (articleView) {
-        articleView.style.opacity = '0';
-        articleView.style.visibility = 'hidden';
-        articleView.style.transform = 'translateY(20px)';
-        
-        // 延迟切换到目标页面
-        setTimeout(() => {
-          switchTab(previousTab);
-          // 重新初始化图标，因为返回后可能需要重新渲染
-          setTimeout(() => {
-            initializeIcons();
-          }, 100);
-        }, 200);
-      }
+      // 创建完整的Markdown文件内容
+      const fullContent = `---
+title: "${article.title}"
+excerpt: "${article.excerpt}"
+date: ${article.date}
+tags: [${article.tags.map(tag => `"${tag}"`).join(', ')}]
+category: ${article.category}
+id: ${article.id}
+---
+
+# ${article.title}
+
+${markdownContent}`;
+      
+      // 写入文件
+      fs.writeFileSync(filePath, fullContent, 'utf8');
+      console.log(`Created file: ${filePath}`);
     });
-  }
-}
-
-// 打开文章详情页面
-function openArticleView(articleId) {
-  const article = findArticleById(articleId);
-  if (!article) return;
-  
-  // 保存当前标签页
-  localStorage.setItem('previousTab', currentTab);
-  
-  // 填充文章内容
-  const articleTitle = document.getElementById('articleTitle');
-  const articleBody = document.getElementById('articleBody');
-  const articleCategory = document.getElementById('articleCategory');
-  const articleDate = document.getElementById('articleDate');
-  const articleTags = document.getElementById('articleTags');
-  
-  if (articleTitle) {
-    articleTitle.textContent = article.title;
-  }
-  
-  if (articleBody) {
-    // 移除文章内容中的h1标题，避免重复显示
-    const contentWithoutH1 = article.content.replace(/<h1[^>]*>.*?<\/h1>/gi, '');
-    articleBody.innerHTML = contentWithoutH1;
-  }
-  
-  if (articleCategory) {
-    articleCategory.textContent = getCategoryName(article.category);
-    articleCategory.className = `article-category ${article.category}`;
-  }
-  
-  if (articleDate) {
-    articleDate.textContent = formatDate(article.date);
-  }
-  
-  if (articleTags) {
-    articleTags.innerHTML = article.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
-  }
-  
-  // 切换到文章视图
-  switchTab('articleView');
-  
-  // 滚动到顶部
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  
-  // 重新初始化图标
-  setTimeout(() => {
-    initializeIcons();
-  }, 100);
-}
-
-// 保留原有的模态框函数以备后用
-function initModal() {
-  const modal = document.getElementById('articleModal');
-  const modalClose = document.getElementById('modalClose');
-  
-  if (modalClose) {
-    modalClose.addEventListener('click', closeModal);
-  }
-  
-  // 点击模态框外部关闭
-  if (modal) {
-    modal.addEventListener('click', function(e) {
-      if (e.target === modal) {
-        closeModal();
-      }
-    });
-  }
-}
-
-// 打开文章模态框
-function openArticleModal(articleId) {
-  const article = findArticleById(articleId);
-  if (!article) return;
-  
-  const modal = document.getElementById('articleModal');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalBody = document.getElementById('modalBody');
-  
-  if (modalTitle && modalBody) {
-    modalTitle.textContent = article.title;
-    modalBody.innerHTML = article.content;
-  }
-  
-  if (modal) {
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-}
-
-// 关闭模态框
-function closeModal() {
-  const modal = document.getElementById('articleModal');
-  if (modal) {
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
-  }
-}
-
-// 根据ID查找文章
-function findArticleById(id) {
-  for (const category in articlesData) {
-    const article = articlesData[category].find(item => item.id === id);
-    if (article) return article;
-  }
-  return null;
-}
-
-// 渲染最新文章
-function renderLatestArticles() {
-  const container = document.getElementById('latestArticles');
-  if (!container) return;
-  
-  // 获取所有文章并按日期排序
-  const allArticles = [];
-  for (const category in articlesData) {
-    allArticles.push(...articlesData[category]);
-  }
-  
-  // 按日期降序排列，取前10篇
-  const latestArticles = allArticles
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
-    .slice(0, 10);
-  
-  container.innerHTML = latestArticles.map(article => createArticleCard(article)).join('');
-}
-
-// 渲染分类文章
-function renderArticlesByCategory() {
-  Object.keys(articlesData).forEach(category => {
-    const container = document.getElementById(`${category}Articles`);
-    if (container) {
-      container.innerHTML = articlesData[category].map(article => createArticleCard(article)).join('');
-    }
   });
+  
+  console.log('All markdown files have been created successfully!');
 }
 
-// 提取文章内容的前面部分用于预览
-function extractArticlePreview(content, maxLength = 75) {
-  // 创建一个临时div来解析HTML
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = content;
-  
-  // 移除h1标题
-  const h1Elements = tempDiv.querySelectorAll('h1');
-  h1Elements.forEach(h1 => h1.remove());
-  
-  // 获取纯文本内容
-  let textContent = tempDiv.textContent || tempDiv.innerText || '';
-  
-  // 清理多余的空白字符
-  textContent = textContent.replace(/\s+/g, ' ').trim();
-  
-  // 截取指定长度
-  if (textContent.length > maxLength) {
-    textContent = textContent.substring(0, maxLength) + '...';
-  }
-  
-  return textContent;
-}
-
-// 创建文章卡片
-function createArticleCard(article) {
-  // 从文章内容中提取预览文本
-  const contentPreview = extractArticlePreview(article.content);
-  
-  return `
-    <div class="article-card" onclick="openArticleView(${article.id})">
-      <div class="article-meta">
-        <span class="article-category ${article.category}">${getCategoryName(article.category)}</span>
-        <span class="article-date">${formatDate(article.date)}</span>
-      </div>
-      <h3 class="article-title">${article.title}</h3>
-      <p class="article-excerpt">${contentPreview}</p>
-      <div class="article-footer">
-        <div class="article-tags">
-          ${article.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-// 获取分类名称
-function getCategoryName(category) {
-  const categoryNames = {
-    reading: '阅读',
-    writing: '写作',
-    logic: '逻辑',
-    speech: '言语'
-  };
-  return categoryNames[category] || category;
-}
-
-// 格式化日期
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-}
-
-// 滚动到指定区域
-function scrollToSection(sectionId) {
-  const section = document.getElementById(sectionId);
-  if (section) {
-    section.scrollIntoView({ behavior: 'smooth' });
-  }
-}
-
-// 初始化滚动动画
-function initScrollAnimations() {
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  };
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, observerOptions);
-  
-  // 观察文章卡片
-  const articleCards = document.querySelectorAll('.article-card');
-  articleCards.forEach(card => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(30px)';
-    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(card);
-  });
-}
-
-// 初始化Lucide图标
-function initializeIcons() {
-  if (typeof lucide !== 'undefined') {
-    lucide.createIcons();
-  }
-}
-
-// 页面加载完成后初始化图标
-window.addEventListener('load', initializeIcons);
+// 执行函数
+createMarkdownFiles();
