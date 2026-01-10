@@ -142,7 +142,7 @@ body {
   padding: var(--space-xs) var(--space-sm);
   color: var(--color-text-secondary);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 400;
   border-radius: var(--radius-md);
   transition: var(--transition-fast);
   overflow: hidden;
@@ -169,7 +169,7 @@ body {
 .nav-link:hover,
 .nav-link.active {
   color: var(--color-primary-dark);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .nav-link.active::after {
@@ -230,14 +230,14 @@ body {
   text-decoration: none;
   border-radius: var(--radius-md);
   transition: var(--transition-fast);
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .mobile-link:hover,
 .mobile-link.active {
   background: var(--glass-bg);
   color: var(--color-primary-dark);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 /* ===== 主内容区域 ===== */
