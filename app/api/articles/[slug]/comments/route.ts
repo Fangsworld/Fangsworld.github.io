@@ -61,10 +61,13 @@ export async function POST(
     // 验证数据
     const validatedData = commentSchema.parse(body);
 
-    // 创建评论
+    // 创建评论（将 null 转换为 undefined）
     const comment = await createComment({
       articleSlug: slug,
-      ...validatedData,
+      authorName: validatedData.authorName,
+      authorEmail: validatedData.authorEmail,
+      content: validatedData.content,
+      parentId: validatedData.parentId ?? undefined,
     });
 
     return NextResponse.json({
