@@ -18,13 +18,17 @@ export function LatestArticles({ articles: initialArticles }: LatestArticlesProp
         const slugs = articles.map(a => encodeURIComponent(a.slug));
         const response = await fetch(`/api/articles/batch-stats?slugs=${slugs.join(',')}`);
         if (response.ok) {
-          const stats = await response.json();
+          const data = await response.json();
+          const stats = data.stats || [];
           const statsMap = new Map(stats.map((s: { slug: string; views: number }) => [s.slug, s.views]));
 
-          setArticles(prev => prev.map(article => ({
-            ...article,
-            views: statsMap.get(encodeURIComponent(article.slug)) || article.views || 0,
-          })));
+          setArticles(prev => prev.map(article => {
+            const viewCount = statsMap.get(encodeURIComponent(article.slug));
+            return {
+              ...article,
+              views: typeof viewCount === 'number' ? viewCount : (article.views ?? 0),
+            };
+          }));
         }
       } catch (error) {
         console.error('Failed to load views:', error);
