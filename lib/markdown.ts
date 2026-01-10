@@ -1,20 +1,26 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { marked } from 'marked';
+import { marked, Renderer } from 'marked';
 import { Category } from '@/types/article';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github-dark.css';
 
-// 配置 marked 使用 highlight.js
+// 创建自定义渲染器以支持代码高亮
+const renderer = new Renderer();
+
+// 重写代码块渲染方法
+renderer.code = function(code, language) {
+  const lang = language && hljs.getLanguage(language) ? language : 'plaintext';
+  const highlighted = hljs.highlight(code, { language: lang }).value;
+  return `<pre class="hljs"><code class="hljs language-${lang}" data-language="${lang}">${highlighted}</code></pre>`;
+};
+
+// 配置 marked
 marked.setOptions({
+  renderer: renderer,
   breaks: true,
   gfm: true,
-  highlight: function(code, lang) {
-    const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-    const highlighted = hljs.highlight(code, { language }).value;
-    return `<pre class="hljs"><code class="hljs language-${language}" data-language="${language}">${highlighted}</code></pre>`;
-  },
 });
 
 // 文章目录路径
