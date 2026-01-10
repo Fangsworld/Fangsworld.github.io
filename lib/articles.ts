@@ -10,21 +10,29 @@ import { generateSlug } from './utils';
  */
 export async function enrichArticlesWithViews(articles: ArticleMetadata[]): Promise<ArticleMetadata[]> {
   try {
+    // 检查环境变量
+    const dbUrl = process.env.DATABASE_URL;
+    console.log('[enrichArticlesWithViews] DATABASE_URL exists:', !!dbUrl);
+    console.log('[enrichArticlesWithViews] DATABASE_URL prefix:', dbUrl?.substring(0, 20) + '...');
+
     const { db } = await import('@/db');
+    console.log('[enrichArticlesWithViews] db object:', !!db);
+
     if (!db) {
-      console.log('[enrichArticlesWithViews] Database not available');
-      return articles;
+      console.log('[enrichArticlesWithViews] Database not available, returning articles without views');
+      return articles.map(article => ({ ...article, views: 0 }));
     }
 
     const { getArticlesStats } = await import('@/db/queries');
     const slugs = articles.map(a => a.slug);
 
-    console.log('[enrichArticlesWithViews] Fetching stats for slugs:', slugs);
+    console.log('[enrichArticlesWithViews] Fetching stats for slugs:', slugs.slice(0, 3));
 
     // 批量获取所有文章的统计数据
     const stats = await getArticlesStats(slugs);
 
-    console.log('[enrichArticlesWithViews] Got stats:', stats);
+    console.log('[enrichArticlesWithViews] Got stats count:', stats.length);
+    console.log('[enrichArticlesWithViews] Sample stats:', stats.slice(0, 2));
 
     const statsMap = new Map(stats.map(s => [s.slug, s]));
 
@@ -34,12 +42,14 @@ export async function enrichArticlesWithViews(articles: ArticleMetadata[]): Prom
       views: statsMap.get(encodeURIComponent(article.slug))?.views || 0,
     }));
 
-    console.log('[enrichArticlesWithViews] Result:', result.map(a => ({ slug: a.slug, views: a.views })));
+    console.log('[enrichArticlesWithViews] Result sample:', result.slice(0, 2).map(a => ({ slug: a.slug, views: a.views })));
 
     return result;
   } catch (error) {
-    console.error('Failed to enrich articles with views:', error);
-    return articles;
+    console.error('[enrichArticlesWithViews] Failed to enrich articles with views:', error);
+    console.error('[enrichArticlesWithViews] Error details:', JSON.stringify(error, Object.getOwnPropertyNames(error)));
+    // 出错时返回带 0 浏览量的文章
+    return articles.map(article => ({ ...article, views: 0 }));
   }
 }
 
