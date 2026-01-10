@@ -10,10 +10,10 @@ import 'highlight.js/styles/github-dark.css';
 const renderer = new Renderer();
 
 // 重写代码块渲染方法
-renderer.code = function(code, language) {
-  const lang = language && hljs.getLanguage(language) ? language : 'plaintext';
-  const highlighted = hljs.highlight(code, { language: lang }).value;
-  return `<pre class="hljs"><code class="hljs language-${lang}" data-language="${lang}">${highlighted}</code></pre>`;
+renderer.code = function({ text, lang }: { text: string; lang?: string }) {
+  const language = lang && hljs.getLanguage(lang) ? lang : 'plaintext';
+  const highlighted = hljs.highlight(text, { language }).value;
+  return `<pre class="hljs"><code class="hljs language-${language}" data-language="${language}">${highlighted}</code></pre>`;
 };
 
 // 配置 marked
