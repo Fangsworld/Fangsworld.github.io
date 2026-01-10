@@ -48,7 +48,13 @@ export default async function ArticlePage({
     const { frontmatter, content } = await getArticleContentCached(category, slug);
 
     // 服务端获取统计数据
-    const initialStats = await getInitialStats(slug, category, frontmatter.title, frontmatter.excerpt);
+    const dbStats = await getInitialStats(slug, category, frontmatter.title, frontmatter.excerpt);
+
+    // 添加 hasLiked 字段，服务端默认为 false
+    const initialStats = dbStats ? {
+      ...dbStats,
+      hasLiked: false,
+    } : undefined;
 
     return (
       <ScrollToTop>
@@ -85,7 +91,7 @@ export default async function ArticlePage({
             category={category}
             title={frontmatter.title}
             excerpt={frontmatter.excerpt}
-            initialStats={initialStats || undefined}
+            initialStats={initialStats}
           />
         </div>
       </ScrollToTop>
