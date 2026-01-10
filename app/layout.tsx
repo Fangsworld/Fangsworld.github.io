@@ -12,7 +12,7 @@ const inter = Inter({
 
 const notoSansSC = Noto_Sans_SC({
   variable: "--font-chinese",
-  subsets: ["chinese-simplified"],
+  weight: ["400", "500", "700"],
   display: "swap",
 });
 
