@@ -81,7 +81,7 @@ export default async function ArticlePage({
             </div>
 
             <div className="article-view-tags">
-              {frontmatter.tags.map((tag: string) => (
+              {frontmatter.tags?.map((tag: string) => (
                 <span key={tag} className="tag">{tag}</span>
               ))}
             </div>
