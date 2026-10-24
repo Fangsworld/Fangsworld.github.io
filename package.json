@@ -15,7 +15,8 @@
     "db:check": "drizzle-kit check",
     "db:health": "npx tsx scripts/db-health.ts",
     "db:migrate-check": "npx tsx scripts/db-migrate-check.ts",
-    "stats:view": "npx tsx scripts/view-stats.ts"
+    "stats:view": "npx tsx scripts/view-stats.ts",
+    "db:migrate-categories": "npx tsx scripts/migrate-categories.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
@@ -32,9 +33,11 @@
     "zod": "^4.3.5"
   },
   "devDependencies": {
+    "@types/cheerio": "^0.22.35",
     "@types/node": "^20.19.27",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cheerio": "^1.1.2",
     "drizzle-kit": "^0.31.8",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",

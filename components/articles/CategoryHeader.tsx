@@ -5,25 +5,29 @@ interface CategoryHeaderProps {
 }
 
 const CATEGORY_INFO: Record<Category, { title: string; subtitle: string }> = {
-  reading: {
-    title: '阅读',
-    subtitle: '分享读书心得与知识提炼'
+  ai: {
+    title: 'AI',
+    subtitle: '人工智能工具、模型与协作实践'
   },
-  writing: {
-    title: '写作',
-    subtitle: '探索文字的力量与表达的艺术'
+  society: {
+    title: '社会',
+    subtitle: '社会心理、沟通与人际关系'
   },
-  logic: {
-    title: '逻辑',
-    subtitle: '理性思考与逻辑思维的实践'
+  science: {
+    title: '科学',
+    subtitle: '逻辑、数学与思维方法'
   },
-  speech: {
-    title: '言语',
-    subtitle: '沟通艺术与语言表达技巧'
+  health: {
+    title: '健康',
+    subtitle: '身心状态、精力与长期节奏'
   },
-  projects: {
-    title: '项目',
-    subtitle: '实践项目与技术探索成果展示'
+  essays: {
+    title: '随感',
+    subtitle: '阅读、写作与个人思考'
+  },
+  products: {
+    title: '产品',
+    subtitle: '项目需求、工具与产品实践'
   }
 };
 

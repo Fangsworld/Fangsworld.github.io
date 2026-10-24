@@ -69,10 +69,12 @@ async function viewStats() {
   `;
 
   const categoryNames: Record<string, string> = {
-    reading: '阅读',
-    writing: '写作',
-    logic: '逻辑',
-    speech: '言语',
+    ai: 'AI',
+    society: '社会',
+    science: '科学',
+    health: '健康',
+    essays: '随感',
+    products: '产品',
   };
 
   categoryStats.forEach((cat: any) => {

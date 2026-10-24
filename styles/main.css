@@ -127,7 +127,7 @@ body {
 
 .brand-text {
   font-family: var(--font-heading);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 1.1rem;
   color: var(--color-primary-dark);
 }
@@ -142,7 +142,7 @@ body {
   padding: var(--space-xs) var(--space-sm);
   color: var(--color-text-secondary);
   text-decoration: none;
-  font-weight: 400;
+  font-weight: 300;
   border-radius: var(--radius-md);
   transition: var(--transition-fast);
   overflow: hidden;
@@ -169,7 +169,7 @@ body {
 .nav-link:hover,
 .nav-link.active {
   color: var(--color-primary-dark);
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .nav-link.active::after {
@@ -237,7 +237,7 @@ body {
 .mobile-link.active {
   background: var(--glass-bg);
   color: var(--color-primary-dark);
-  font-weight: 500;
+  font-weight: 400;
 }
 
 /* ===== 主内容区域 ===== */
@@ -279,7 +279,7 @@ body {
 .hero-title {
   font-family: var(--font-heading);
   font-size: 3rem;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--color-primary-dark);
   margin-bottom: var(--space-sm);
   line-height: 1.2;
@@ -288,7 +288,7 @@ body {
 .hero-subtitle {
   font-size: 1.3rem;
   color: var(--color-accent);
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: var(--space-md);
 }
 
@@ -297,6 +297,7 @@ body {
   color: var(--color-text-secondary);
   margin-bottom: var(--space-lg);
   line-height: 1.8;
+  font-weight: 400;
 }
 
 .hero-actions {
@@ -335,7 +336,7 @@ body {
   color: white;
   border: none;
   border-radius: var(--radius-lg);
-  font-weight: 600;
+  font-weight: 500;
   text-decoration: none;
   cursor: pointer;
   transition: var(--transition-smooth);
@@ -356,7 +357,7 @@ body {
 .section-title {
   font-family: var(--font-heading);
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 400;
   color: var(--color-primary-dark);
   margin-bottom: 8px;
 }
@@ -367,6 +368,7 @@ body {
   max-width: 600px;
   margin: 0 auto;
   opacity: 0.8;
+  font-weight: 400;
 }
 
 /* ===== 最新更新区域 ===== */
@@ -427,41 +429,52 @@ body {
   margin-bottom: var(--space-sm);
   font-size: 0.875rem;
   color: var(--color-text-muted);
+  font-weight: 400;
 }
 
 .article-category {
   padding: 4px 12px;
   border-radius: 20px;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.article-category.reading {
+.article-category.ai {
   background: rgba(12, 191, 160, 0.2);
   color: var(--color-accent);
 }
 
-.article-category.writing {
+.article-category.society {
   background: rgba(231, 66, 103, 0.2);
   color: var(--color-accent-secondary);
 }
 
-.article-category.logic {
+.article-category.science {
   background: rgba(231, 192, 0, 0.2);
   color: var(--color-accent-tertiary);
 }
 
-.article-category.speech {
+.article-category.health {
   background: rgba(38, 172, 158, 0.2);
   color: var(--color-accent-quaternary);
+}
+
+.article-category.essays {
+  background: rgba(139, 92, 246, 0.2);
+  color: #8B5CF6;
+}
+
+.article-category.products {
+  background: rgba(99, 102, 241, 0.2);
+  color: #6366F1;
 }
 
 .article-title {
   font-family: var(--font-heading);
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--color-primary-dark);
   margin-bottom: var(--space-sm);
   line-height: 1.4;
@@ -471,6 +484,7 @@ body {
   color: var(--color-text-secondary);
   margin-bottom: var(--space-md);
   line-height: 1.6;
+  font-weight: 400;
 }
 
 .article-footer {
@@ -479,6 +493,7 @@ body {
   justify-content: space-between;
   font-size: 0.875rem;
   color: var(--color-text-muted);
+  font-weight: 400;
 }
 
 .article-tags {
@@ -492,6 +507,7 @@ body {
   color: var(--color-accent);
   border-radius: var(--radius-sm);
   font-size: 0.7rem;
+  font-weight: 400;
 }
 
 /* ===== 文章详情页面 ===== */
@@ -571,7 +587,7 @@ body {
 .article-view-title {
   font-family: var(--font-heading);
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--color-primary-dark);
   margin-bottom: var(--space-xs);
   line-height: 1.3;
@@ -600,7 +616,7 @@ body {
   color: var(--color-primary-dark);
   margin: var(--space-md) 0 var(--space-xs) 0;
   font-family: var(--font-heading);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.3;
 }
 
@@ -622,9 +638,10 @@ body {
 
 .article-view-body p {
   margin-bottom: var(--space-md);
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
   font-size: 1.05rem;
   line-height: 1.8;
+  font-weight: 400;
 }
 
 .article-view-body ul,
@@ -635,14 +652,15 @@ body {
 
 .article-view-body li {
   margin-bottom: var(--space-xs);
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
   font-size: 1.05rem;
   line-height: 1.8;
+  font-weight: 400;
 }
 
 .article-view-body strong {
   color: var(--color-primary-dark);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .article-view-body em {
@@ -664,7 +682,7 @@ body {
   color: var(--color-accent);
   border-radius: 16px;
   font-size: 0.8rem;
-  font-weight: 500;
+  font-weight: 400;
   border: 1px solid rgba(12, 191, 160, 0.2);
   transition: var(--transition-fast);
 }
@@ -726,7 +744,7 @@ body {
 .modal-title {
   font-family: var(--font-heading);
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 400;
   color: var(--color-primary-dark);
 }
 
@@ -787,6 +805,7 @@ body {
 .footer-info p {
   color: var(--color-text-secondary);
   margin-bottom: var(--space-sm);
+  font-weight: 400;
 }
 
 .footer-tagline {

@@ -15,11 +15,12 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { href: '/', label: '主页', key: 'home' },
-  { href: '/reading', label: '阅读', key: 'reading' },
-  { href: '/writing', label: '写作', key: 'writing' },
-  { href: '/logic', label: '逻辑', key: 'logic' },
-  { href: '/speech', label: '言语', key: 'speech' },
-  { href: '/projects', label: '项目', key: 'projects' },
+  { href: '/ai', label: 'AI', key: 'ai' },
+  { href: '/society', label: '社会', key: 'society' },
+  { href: '/science', label: '科学', key: 'science' },
+  { href: '/health', label: '健康', key: 'health' },
+  { href: '/essays', label: '随感', key: 'essays' },
+  { href: '/products', label: '产品', key: 'products' },
 ];
 
 export function Navigation() {

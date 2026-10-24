@@ -1,5 +1,7 @@
 // 通用工具函数
 
+import { CATEGORY_NAMES, type Category } from '@/types/article';
+
 // 格式化日期 - 使用阿拉伯数字避免 hydration 错误
 export function formatDate(dateString: string): string {
   const date = new Date(dateString);
@@ -26,12 +28,5 @@ export function delay(ms: number): Promise<void> {
 
 // 获取分类名称
 export function getCategoryName(category: string): string {
-  const categoryNames: Record<string, string> = {
-    reading: '阅读',
-    writing: '写作',
-    logic: '逻辑',
-    speech: '言语',
-    projects: '项目',
-  };
-  return categoryNames[category] || category;
+  return CATEGORY_NAMES[category as Category] || category;
 }

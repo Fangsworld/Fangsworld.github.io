@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Search, X } from 'lucide-react';
-import { ArticleMetadata } from '@/types/article';
+import { ArticleMetadata, CATEGORY_NAMES, type Category } from '@/types/article';
 import Link from 'next/link';
 
 interface SearchBarProps {
@@ -232,12 +232,5 @@ function highlightMatch(text: string, query: string, maxLength?: number): string
 }
 
 function getCategoryName(category: string): string {
-  const categoryNames: Record<string, string> = {
-    reading: '阅读',
-    writing: '写作',
-    logic: '逻辑',
-    speech: '言语',
-    projects: '项目',
-  };
-  return categoryNames[category] || category;
+  return CATEGORY_NAMES[category as Category] || category;
 }

@@ -1,5 +1,5 @@
 // 文章分类类型
-export type Category = 'reading' | 'writing' | 'logic' | 'speech' | 'projects';
+export type Category = 'ai' | 'society' | 'science' | 'health' | 'essays' | 'products';
 
 // 文章元数据接口
 export interface ArticleMetadata {
@@ -20,11 +20,12 @@ export interface Article extends ArticleMetadata {
 
 // 分类名称映射
 export const CATEGORY_NAMES: Record<Category, string> = {
-  reading: '阅读',
-  writing: '写作',
-  logic: '逻辑',
-  speech: '言语',
-  projects: '项目',
+  ai: 'AI',
+  society: '社会',
+  science: '科学',
+  health: '健康',
+  essays: '随感',
+  products: '产品',
 };
 
 // 获取分类名称
@@ -33,4 +34,4 @@ export function getCategoryName(category: Category): string {
 }
 
 // 所有分类列表
-export const CATEGORIES: Category[] = ['reading', 'writing', 'logic', 'speech', 'projects'];
+export const CATEGORIES: Category[] = ['ai', 'society', 'science', 'health', 'essays', 'products'];

@@ -2,7 +2,7 @@ import { CategoryHeader } from '@/components/articles/CategoryHeader';
 import { ArticleCard } from '@/components/articles/ArticleCard';
 import { getArticlesByCategoryCached } from '@/lib/cache';
 import { enrichArticlesWithViews } from '@/lib/articles';
-import { Category } from '@/types/article';
+import { Category, CATEGORIES, CATEGORY_NAMES } from '@/types/article';
 import { notFound } from 'next/navigation';
 
 export default async function CategoryPage({
@@ -13,8 +13,7 @@ export default async function CategoryPage({
   const { category } = await params;
 
   // 验证分类是否有效
-  const validCategories: Category[] = ['reading', 'writing', 'logic', 'speech', 'projects'];
-  if (!validCategories.includes(category)) {
+  if (!CATEGORIES.includes(category)) {
     notFound();
   }
 
@@ -36,8 +35,7 @@ export default async function CategoryPage({
 
 // 生成静态参数（可选，用于静态生成）
 export async function generateStaticParams() {
-  const categories: Category[] = ['reading', 'writing', 'logic', 'speech', 'projects'];
-  return categories.map((category) => ({
+  return CATEGORIES.map((category) => ({
     category,
   }));
 }
@@ -50,16 +48,10 @@ export async function generateMetadata({
 }) {
   const { category } = await params;
 
-  const categoryTitles: Record<Category, string> = {
-    reading: '阅读',
-    writing: '写作',
-    logic: '逻辑',
-    speech: '言语',
-    projects: '项目',
-  };
+  const categoryTitle = CATEGORY_NAMES[category] ?? category;
 
   return {
-    title: `${categoryTitles[category]} - 宇文平野`,
-    description: `浏览宇文平野的${categoryTitles[category]}相关文章`,
+    title: `${categoryTitle} - 宇文平野`,
+    description: `浏览宇文平野的${categoryTitle}相关文章`,
   };
 }

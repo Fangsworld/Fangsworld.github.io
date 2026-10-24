@@ -63,7 +63,7 @@ export async function POST(
 
     if (action === 'view') {
       // 增加浏览量
-      await getOrCreateArticle(slug, category || 'reading', title || '', excerpt);
+      await getOrCreateArticle(slug, category || 'essays', title || '', excerpt);
       await incrementArticleViews(slug);
       const stats = await getArticleStats(slug);
       return NextResponse.json(stats);
