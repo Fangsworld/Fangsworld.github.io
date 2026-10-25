@@ -1,7 +1,10 @@
 'use client';
 
+import styles from './Comments.module.css';
+
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'next/navigation';
+import { useArticleInteractions } from './ArticleInteractions';
 import { Send, User, Mail, MessageCircle, X, Check, AlertCircle, Loader2, Eye, Heart } from 'lucide-react';
 
 interface Comment {
@@ -27,21 +30,7 @@ interface ValidationErrors {
 
 type FormStatus = 'idle' | 'validating' | 'submitting' | 'success' | 'error';
 
-interface Stats {
-  views: number;
-  likes: number;
-  commentCount: number;
-  hasLiked: boolean;
-}
-
-interface CommentsProps {
-  category: string;
-  title: string;
-  excerpt?: string;
-  initialStats?: Stats;
-}
-
-export function Comments({ category, title, excerpt, initialStats }: CommentsProps) {
+export function Comments() {
   const params = useParams();
   const slug = params.slug as string;
 
@@ -50,14 +39,7 @@ export function Comments({ category, title, excerpt, initialStats }: CommentsPro
   const [showForm, setShowForm] = useState(false);
   const [replyTo, setReplyTo] = useState<number | null>(null);
 
-  // 统计数据 - 使用初始值或默认值
-  const [stats, setStats] = useState<Stats>(initialStats || {
-    views: 0,
-    likes: 0,
-    commentCount: 0,
-    hasLiked: false,
-  });
-  const [isLoadingStats, setIsLoadingStats] = useState(!initialStats);
+  const { stats, setStats, isLoadingStats, available } = useArticleInteractions();
   const [isLiking, setIsLiking] = useState(false);
   const [showLikeAnimation, setShowLikeAnimation] = useState(false);
 
@@ -75,41 +57,9 @@ export function Comments({ category, title, excerpt, initialStats }: CommentsPro
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  // 加载统计数据并记录浏览（仅在客户端且没有初始值时）
-  useEffect(() => {
-    if (!slug || initialStats) return;
-
-    const initStats = async () => {
-      try {
-        // 记录浏览量
-        await fetch(`/api/articles/${encodeURIComponent(slug)}/stats`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'view',
-            category,
-            title,
-            excerpt,
-          }),
-        });
-
-        // 获取统计数据
-        const response = await fetch(`/api/articles/${encodeURIComponent(slug)}/stats`);
-        const data = await response.json();
-        setStats(data);
-      } catch (error) {
-        console.error('Failed to load stats:', error);
-      } finally {
-        setIsLoadingStats(false);
-      }
-    };
-
-    initStats();
-  }, [slug, category, title, excerpt, initialStats]);
-
   // 点赞功能
   const handleLike = useCallback(async () => {
-    if (!slug || isLiking) return;
+    if (!slug || isLiking || !available) return;
 
     setIsLiking(true);
     setShowLikeAnimation(true);
@@ -121,6 +71,7 @@ export function Comments({ category, title, excerpt, initialStats }: CommentsPro
         body: JSON.stringify({ action: 'like' }),
       });
 
+      if (!response.ok) throw new Error('点赞暂时不可用');
       const data = await response.json();
       setStats({
         views: stats.views,
@@ -136,7 +87,7 @@ export function Comments({ category, title, excerpt, initialStats }: CommentsPro
     } finally {
       setIsLiking(false);
     }
-  }, [slug, stats, isLiking]);
+  }, [slug, stats, isLiking, available, setStats]);
 
   // 实时验证
   const validateField = useCallback((name: string, value: string): string | undefined => {
@@ -284,7 +235,7 @@ export function Comments({ category, title, excerpt, initialStats }: CommentsPro
   }, []);
 
   return (
-    <div className="comments-section">
+    <div className={`comments-section ${styles.root}`}>
       {/* 头部：统计 + 写评论按钮 */}
       <div className="comments-header">
         <div className="comments-stats">
@@ -304,7 +255,7 @@ export function Comments({ category, title, excerpt, initialStats }: CommentsPro
                 className={`stat-item ${stats.hasLiked ? 'liked' : ''} ${showLikeAnimation ? 'animate' : ''}`}
                 onClick={handleLike}
                 title={stats.hasLiked ? '取消点赞' : '点赞这篇文章'}
-                style={{ cursor: isLiking ? 'wait' : 'pointer' }}
+                style={{ cursor: !available ? 'default' : isLiking ? 'wait' : 'pointer' }}
               >
                 <Heart
                   size={16}
@@ -320,7 +271,7 @@ export function Comments({ category, title, excerpt, initialStats }: CommentsPro
             </>
           )}
         </div>
-        {!showForm && (
+        {!showForm && available && (
           <button
             onClick={() => setShowForm(true)}
             className="btn-write-comment"
@@ -330,6 +281,8 @@ export function Comments({ category, title, excerpt, initialStats }: CommentsPro
           </button>
         )}
       </div>
+
+      {!isLoadingStats && !available && <p role="status">互动功能暂时不可用，文章仍可正常阅读。</p>}
 
       {/* 状态消息 */}
       {formStatus === 'success' && statusMessage && (

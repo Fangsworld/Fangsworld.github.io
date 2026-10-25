@@ -9,7 +9,6 @@ import {
   getArticlesByDateRange,
 } from './articles';
 import { Category, ArticleMetadata } from '@/types/article';
-import { parseMarkdownFile } from './markdown';
 
 // ===== 缓存的文章元数据获取函数 =====
 // 使用 React Cache 确保在单次请求中相同函数只执行一次
@@ -71,6 +70,7 @@ export const getArticlesByDateRangeCached = cache((startDate: Date, endDate: Dat
  * 使用缓存避免重复读取和解析 markdown 文件
  */
 export const getArticleContentCached = cache(async (category: Category, slug: string) => {
+  const { parseMarkdownFile } = await import('./markdown');
   return await parseMarkdownFile(category, slug);
 });
 

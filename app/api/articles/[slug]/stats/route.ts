@@ -14,11 +14,13 @@ export async function GET(
       likes: 0,
       commentCount: 0,
       hasLiked: false,
+      available: false,
     });
   }
 
   try {
-    const { slug } = await params;
+    const { slug: rawSlug } = await params;
+    const slug = encodeURIComponent(decodeURIComponent(rawSlug));
     const stats = await getArticleStats(slug);
 
     // 检查用户是否已点赞
@@ -52,7 +54,8 @@ export async function POST(
   }
 
   try {
-    const { slug } = await params;
+    const { slug: rawSlug } = await params;
+    const slug = encodeURIComponent(decodeURIComponent(rawSlug));
     const body = await request.json();
     const { action, category, title, excerpt } = body;
 
@@ -66,7 +69,8 @@ export async function POST(
       await getOrCreateArticle(slug, category || 'essays', title || '', excerpt);
       await incrementArticleViews(slug);
       const stats = await getArticleStats(slug);
-      return NextResponse.json(stats);
+      const hasLiked = await hasUserLiked(slug, ip);
+      return NextResponse.json({ ...stats, hasLiked });
     } else if (action === 'like') {
       // 切换点赞
       const result = await toggleLike(slug, ip, userAgent);

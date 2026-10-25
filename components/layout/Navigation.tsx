@@ -36,7 +36,7 @@ export function Navigation() {
 
   return (
     <>
-      <header className="nav-header">
+      <header className={`nav-header ${styles.root}`}>
         <div className="container">
           <nav className="nav-content">
             <Link href="/" className="nav-brand">
@@ -58,21 +58,23 @@ export function Navigation() {
 
             <div className="nav-actions">
               <SearchBar placeholder="搜索..." />
-              <button
-                className="mobile-menu-btn"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                aria-label="Toggle menu"
-              >
-                <Menu size={24} />
-              </button>
             </div>
+            <button
+              className="mobile-menu-btn"
+              onClick={() => setMobileMenuOpen(open => !open)}
+              aria-label="切换导航菜单"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
+            >
+              <Menu size={24} />
+            </button>
           </nav>
         </div>
       </header>
 
-      <div className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`}>
+      <div id="mobile-navigation" inert={!mobileMenuOpen} className={`${styles.root} mobile-menu ${mobileMenuOpen ? 'active' : ''}`}>
         <div className="mobile-menu-content">
-          <SearchBar placeholder="搜索文章..." />
+          <SearchBar placeholder="搜索文章..." onNavigate={() => setMobileMenuOpen(false)} />
           {navItems.map((item) => (
             <Link
               key={item.key}

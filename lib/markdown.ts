@@ -4,7 +4,6 @@ import matter from 'gray-matter';
 import { marked, Renderer } from 'marked';
 import { Category } from '@/types/article';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/github-dark.css';
 
 // 创建自定义渲染器以支持代码高亮
 const renderer = new Renderer();
@@ -35,6 +34,9 @@ export function getArticlePath(category: Category, slug: string): string {
 export async function parseMarkdownFile(category: Category, slug: string) {
   // Decode URL-encoded slug
   const decodedSlug = decodeURIComponent(slug);
+  if (decodedSlug.includes('/') || decodedSlug.includes('\\') || decodedSlug === '.' || decodedSlug === '..') {
+    throw new Error('Invalid article slug');
+  }
   const fullPath = getArticlePath(category, decodedSlug);
 
   // 检查文件是否存在
@@ -55,18 +57,6 @@ export async function parseMarkdownFile(category: Category, slug: string) {
     frontmatter: data,
     content: contentWithoutTitle,
   };
-}
-
-// 获取指定目录下的所有 Markdown 文件
-export function getMarkdownFiles(category: Category): string[] {
-  const categoryPath = path.join(CONTENT_DIR, category);
-
-  if (!fs.existsSync(categoryPath)) {
-    return [];
-  }
-
-  const files = fs.readdirSync(categoryPath);
-  return files.filter(file => file.endsWith('.md'));
 }
 
 // 提取文章摘要（从 HTML 内容中）

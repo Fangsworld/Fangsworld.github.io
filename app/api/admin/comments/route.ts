@@ -1,11 +1,15 @@
 import { NextResponse } from 'next/server';
-import { getPendingComments } from '@/db/queries';
+import { requireAdmin } from '@/lib/admin-auth.server';
 
 // 获取所有待审核评论
-export async function GET() {
+export async function GET(request: Request) {
+  const rejection = requireAdmin(request);
+  if (rejection) return rejection;
+
   try {
+    const { getPendingComments } = await import('@/db/queries');
     const comments = await getPendingComments();
-    return NextResponse.json({ comments, count: comments.length });
+    return NextResponse.json({ comments, count: comments.length }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
     console.error('Error fetching pending comments:', error);
     return NextResponse.json(

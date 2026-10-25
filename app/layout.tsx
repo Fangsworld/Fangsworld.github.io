@@ -1,27 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, Poppins, Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { BackgroundDecoration } from "@/components/layout/BackgroundDecoration";
-
-const inter = Inter({
-  variable: "--font-body",
-  subsets: ["latin"],
-  weight: ["300", "400"],
-});
-
-const notoSansSC = Noto_Sans_SC({
-  variable: "--font-chinese",
-  weight: ["300", "400", "500"],
-  display: "swap",
-});
-
-const poppins = Poppins({
-  variable: "--font-heading",
-  weight: ["400", "500"],
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "宇文平野 - 思维与写作的个人空间",
@@ -35,8 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className={`${inter.variable} ${poppins.variable} ${notoSansSC.variable}`}>
-      <body className={`${inter.className} ${notoSansSC.className}`} suppressHydrationWarning>
+    <html lang="zh-CN">
+      <body>
         <BackgroundDecoration />
         <Navigation />
         <main className="main-content">{children}</main>

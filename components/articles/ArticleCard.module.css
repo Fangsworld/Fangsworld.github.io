@@ -1,0 +1,100 @@
+/* Component-scoped styles; existing descendant names stay inside the local root. */
+
+.root:global(.article-card) {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px var(--glass-shadow);
+  padding: var(--space-md);
+  transition: var(--transition-smooth);
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  text-decoration: none;
+  display: block;
+}
+
+.root:global(.article-card::before) {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-secondary), var(--color-accent-tertiary));
+}
+
+.root:global(.article-card:hover) {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px var(--glass-shadow);
+}
+
+.root :global(.article-meta) {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+.root :global(.article-meta .article-views) {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.root :global(.article-title) {
+  font-family: var(--font-heading);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-primary-dark);
+  margin-bottom: var(--space-sm);
+  line-height: 1.4;
+}
+
+.root :global(.article-excerpt) {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-md);
+  line-height: 1.6;
+  font-weight: 400;
+  font-size: 0.8125rem;
+}
+
+.root :global(.article-footer) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+.root :global(.article-tags) {
+  display: flex;
+  gap: 4px;
+}
+
+@media (max-width: 480px) {
+  .root:global(.article-card) {
+    padding: var(--space-sm);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.root:global(.article-card) {
+  animation: slideInUp 0.6s ease-out forwards;
+}

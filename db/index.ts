@@ -4,10 +4,11 @@ import * as schema from './schema';
 
 // 延迟获取 DATABASE_URL，以便支持 dotenv 等工具加载环境变量
 function getDatabaseUrl() {
-  return process.env.DATABASE_URL;
+  return process.env.DISABLE_DATABASE === 'true' ? undefined : process.env.DATABASE_URL;
 }
 
 function createDbConnection() {
+  if (process.env.DISABLE_DATABASE === 'true') return null;
   const DATABASE_URL = getDatabaseUrl();
 
   if (!DATABASE_URL) {
@@ -28,7 +29,7 @@ function createDbConnection() {
 export const db = createDbConnection();
 
 // 检查数据库是否可用
-export const isDatabaseEnabled = !!getDatabaseUrl();
+export const isDatabaseEnabled = db !== null;
 
 // 动态检查数据库连接
 export function getDb() {

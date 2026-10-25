@@ -1,57 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { Article, ArticleMetadata, Category, CATEGORIES } from '@/types/article';
-import { getMarkdownFiles } from './markdown';
-import { generateSlug } from './utils';
-
-/**
- * 为文章列表添加浏览量数据
- */
-export async function enrichArticlesWithViews(articles: ArticleMetadata[]): Promise<ArticleMetadata[]> {
-  try {
-    // 检查环境变量
-    const dbUrl = process.env.DATABASE_URL;
-    console.log('[enrichArticlesWithViews] DATABASE_URL exists:', !!dbUrl);
-    console.log('[enrichArticlesWithViews] DATABASE_URL prefix:', dbUrl?.substring(0, 20) + '...');
-
-    const { db } = await import('@/db');
-    console.log('[enrichArticlesWithViews] db object:', !!db);
-
-    if (!db) {
-      console.log('[enrichArticlesWithViews] Database not available, returning articles without views');
-      return articles.map(article => ({ ...article, views: 0 }));
-    }
-
-    const { getArticlesStats } = await import('@/db/queries');
-    const slugs = articles.map(a => a.slug);
-
-    console.log('[enrichArticlesWithViews] Fetching stats for slugs:', slugs.slice(0, 3));
-
-    // 批量获取所有文章的统计数据
-    const stats = await getArticlesStats(slugs);
-
-    console.log('[enrichArticlesWithViews] Got stats count:', stats.length);
-    console.log('[enrichArticlesWithViews] Sample stats:', stats.slice(0, 2));
-
-    const statsMap = new Map(stats.map(s => [s.slug, s]));
-
-    // 合并数据（数据库中 slug 是 URL 编码的，所以需要编码 article.slug 来匹配）
-    const result = articles.map(article => ({
-      ...article,
-      views: statsMap.get(encodeURIComponent(article.slug))?.views || 0,
-    }));
-
-    console.log('[enrichArticlesWithViews] Result sample:', result.slice(0, 2).map(a => ({ slug: a.slug, views: a.views })));
-
-    return result;
-  } catch (error) {
-    console.error('[enrichArticlesWithViews] Failed to enrich articles with views:', error);
-    console.error('[enrichArticlesWithViews] Error details:', JSON.stringify(error, Object.getOwnPropertyNames(error)));
-    // 出错时返回带 0 浏览量的文章
-    return articles.map(article => ({ ...article, views: 0 }));
-  }
-}
+import { ArticleMetadata, Category, CATEGORIES } from '@/types/article';
+import { getMarkdownFiles } from './content-files';
 
 // 内容目录路径
 const CONTENT_DIR = path.join(process.cwd(), 'articles');

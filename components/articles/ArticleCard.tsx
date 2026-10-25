@@ -1,3 +1,5 @@
+
+import styles from './ArticleCard.module.css';
 import Link from 'next/link';
 import { ArticleMetadata } from '@/types/article';
 import { getCategoryName, formatDate } from '@/lib/utils';
@@ -9,7 +11,7 @@ interface ArticleCardProps {
 
 export function ArticleCard({ article }: ArticleCardProps) {
   return (
-    <Link href={`/${article.category}/${article.slug}`} className="article-card">
+    <Link href={`/${article.category}/${article.slug}`} className={`article-card ${styles.root}`}>
       <div className="article-meta">
         <span className={`article-category ${article.category}`}>
           {getCategoryName(article.category)}

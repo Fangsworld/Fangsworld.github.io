@@ -1,40 +1,20 @@
 import { notFound } from 'next/navigation';
 import { getArticleContentCached } from '@/lib/cache';
 import { getCategoryName, formatDate } from '@/lib/utils';
-import { Eye } from 'lucide-react';
-import { Category } from '@/types/article';
+import { Category, CATEGORIES } from '@/types/article';
+import { getAllArticlePaths } from '@/lib/articles';
+import { ArticleInteractions, ArticleViews } from '@/components/articles/ArticleInteractions';
+import styles from './page.module.css';
+import 'highlight.js/styles/github-dark.css';
 import { Comments } from '@/components/articles/Comments';
 import { BackButton } from '@/components/layout/BackButton';
 import { ScrollToTop } from '@/components/layout/ScrollToTop';
 
-export const dynamic = 'force-dynamic';
+// Only known Markdown files are published; article HTML never waits for the database.
+export const dynamicParams = false;
 
-async function getInitialStats(slug: string, category: string, title: string, excerpt?: string) {
-  try {
-    const { db } = await import('@/db');
-    if (!db) {
-      console.log('[getInitialStats] Database not available for:', slug);
-      return null;
-    }
-
-    const { getOrCreateArticle, incrementArticleViews, getArticleStats } = await import('@/db/queries');
-
-    console.log('[getInitialStats] Before increment for:', slug);
-
-    // 确保文章存在并记录浏览
-    await getOrCreateArticle(slug, category, title, excerpt);
-    await incrementArticleViews(slug);
-
-    // 获取统计数据
-    const stats = await getArticleStats(slug);
-
-    console.log('[getInitialStats] After increment for:', slug, 'stats:', stats);
-
-    return stats;
-  } catch (error) {
-    console.error('Failed to get initial stats:', error);
-    return null;
-  }
+export function generateStaticParams() {
+  return getAllArticlePaths();
 }
 
 export default async function ArticlePage({
@@ -43,58 +23,44 @@ export default async function ArticlePage({
   params: Promise<{ category: Category; slug: string }>;
 }) {
   const { category, slug } = await params;
+  if (!CATEGORIES.includes(category)) notFound();
 
   try {
     const { frontmatter, content } = await getArticleContentCached(category, slug);
 
-    // 服务端获取统计数据
-    const dbStats = await getInitialStats(slug, category, frontmatter.title, frontmatter.excerpt);
-
-    // 添加 hasLiked 字段，服务端默认为 false
-    const initialStats = dbStats ? {
-      ...dbStats,
-      hasLiked: false,
-    } : undefined;
-
     return (
-      <ScrollToTop>
-        <div className="article-view-container" style={{ opacity: 1, visibility: 'visible', transform: 'translateY(0)' }}>
-          <div className="article-view-header">
-            <BackButton fallback="/" />
+      <ArticleInteractions key={`${category}/${slug}`} slug={slug} category={category} title={frontmatter.title} excerpt={frontmatter.excerpt}>
+        <ScrollToTop>
+          <div className={`${styles.root} article-view-container`} style={{ opacity: 1, visibility: 'visible', transform: 'translateY(0)' }}>
+            <div className="article-view-header">
+              <BackButton fallback="/" />
+            </div>
+
+            <div className="article-view-content">
+              <h1 className="article-view-title">{frontmatter.title}</h1>
+              <div className="article-view-meta">
+                <span className={`article-category ${frontmatter.category}`}>
+                  {getCategoryName(frontmatter.category)}
+                </span>
+                <span className="article-date">{formatDate(frontmatter.date)}</span>
+                <ArticleViews />
+              </div>
+
+              <div className="article-view-body">
+                <div dangerouslySetInnerHTML={{ __html: content }} />
+              </div>
+
+              <div className="article-view-tags">
+                {frontmatter.tags?.map((tag: string) => (
+                  <span key={tag} className="tag">{tag}</span>
+                ))}
+              </div>
+            </div>
+
+            <Comments />
           </div>
-
-          <div className="article-view-content">
-            <h1 className="article-view-title">{frontmatter.title}</h1>
-            <div className="article-view-meta">
-              <span className={`article-category ${frontmatter.category}`}>
-                {getCategoryName(frontmatter.category)}
-              </span>
-              <span className="article-date">{formatDate(frontmatter.date)}</span>
-              <span className="article-views">
-                <Eye size={14} strokeWidth={2} />
-                <span>{(initialStats?.views || 0).toLocaleString()}</span>
-              </span>
-            </div>
-
-            <div className="article-view-body">
-              <div dangerouslySetInnerHTML={{ __html: content }} />
-            </div>
-
-            <div className="article-view-tags">
-              {frontmatter.tags?.map((tag: string) => (
-                <span key={tag} className="tag">{tag}</span>
-              ))}
-            </div>
-          </div>
-
-          <Comments
-            category={category}
-            title={frontmatter.title}
-            excerpt={frontmatter.excerpt}
-            initialStats={initialStats}
-          />
-        </div>
-      </ScrollToTop>
+        </ScrollToTop>
+      </ArticleInteractions>
     );
   } catch (error) {
     console.error('Error loading article:', error);
@@ -109,6 +75,7 @@ export async function generateMetadata({
   params: Promise<{ category: Category; slug: string }>;
 }) {
   const { category, slug } = await params;
+  if (!CATEGORIES.includes(category)) notFound();
 
   try {
     const { frontmatter } = await getArticleContentCached(category, slug);

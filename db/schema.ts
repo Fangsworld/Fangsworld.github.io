@@ -1,5 +1,4 @@
 import { pgTable, serial, text, timestamp, integer, index } from 'drizzle-orm/pg-core';
-import { sql } from 'drizzle-orm';
 
 // 文章统计表
 export const articles = pgTable('articles', {

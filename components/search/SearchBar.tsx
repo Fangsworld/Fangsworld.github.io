@@ -1,64 +1,67 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import styles from './SearchBar.module.css';
+
+import { useState, useEffect, useRef, useCallback, useId, useMemo } from 'react';
 import { Search, X } from 'lucide-react';
 import { ArticleMetadata, CATEGORY_NAMES, type Category } from '@/types/article';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface SearchBarProps {
   placeholder?: string;
+  onNavigate?: () => void;
 }
 
-export function SearchBar({ placeholder = '搜索文章...' }: SearchBarProps) {
+export function SearchBar({ placeholder = '搜索文章...', onNavigate }: SearchBarProps) {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<ArticleMetadata[]>([]);
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [activeIndex, setActiveIndex] = useState(-1);
   const [isOpen, setIsOpen] = useState(false);
   const [allArticles, setAllArticles] = useState<ArticleMetadata[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  const resultsId = useId();
+  const router = useRouter();
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // 加载所有文章（只在客户端执行一次）
+  // 请求随组件卸载取消，开发模式重复执行 effect 时不会更新旧请求的状态。
   useEffect(() => {
-    setIsLoading(true);
-    fetch('/api/search/')
-      .then(res => res.json())
+    const controller = new AbortController();
+    fetch('/api/search/', { signal: controller.signal })
+      .then(res => {
+        if (!res.ok) throw new Error(`Search request failed: ${res.status}`);
+        return res.json();
+      })
       .then(data => {
-        setAllArticles(data.articles || []);
-        setIsLoading(false);
+        if (!controller.signal.aborted) setAllArticles(data.articles || []);
       })
       .catch(err => {
+        if (controller.signal.aborted) return;
         console.error('Failed to load articles:', err);
-        setIsLoading(false);
+        setLoadError(true);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setIsLoading(false);
       });
+    return () => controller.abort();
   }, []);
 
-  // 执行搜索 - 使用防抖优化
   useEffect(() => {
-    if (!query.trim()) {
-      setResults([]);
-      return;
-    }
-
-    // 防抖：延迟搜索执行
-    const timer = setTimeout(() => {
-      const searchQuery = query.toLowerCase().trim();
-      const filtered = allArticles.filter(article => {
-        const titleMatch = article.title.toLowerCase().includes(searchQuery);
-        const excerptMatch = article.excerpt.toLowerCase().includes(searchQuery);
-        const tagsMatch = article.tags.some(tag =>
-          tag.toLowerCase().includes(searchQuery)
-        );
-        const categoryMatch = article.category.toLowerCase().includes(searchQuery);
-
-        return titleMatch || excerptMatch || tagsMatch || categoryMatch;
-      });
-
-      setResults(filtered.slice(0, 8)); // 限制最多显示8条结果
-    }, 200); // 200ms 防抖
-
+    const timer = setTimeout(() => setDebouncedQuery(query.trim().toLowerCase()), 200);
     return () => clearTimeout(timer);
-  }, [query, allArticles]);
+  }, [query]);
+
+  const results = useMemo(() => {
+    if (!debouncedQuery) return [];
+    return allArticles.filter(article =>
+      article.title.toLowerCase().includes(debouncedQuery) ||
+      article.excerpt.toLowerCase().includes(debouncedQuery) ||
+      article.tags.some(tag => tag.toLowerCase().includes(debouncedQuery)) ||
+      article.category.toLowerCase().includes(debouncedQuery)
+    ).slice(0, 8);
+  }, [allArticles, debouncedQuery]);
 
   // 点击外部关闭搜索结果
   useEffect(() => {
@@ -89,13 +92,15 @@ export function SearchBar({ placeholder = '搜索文章...' }: SearchBarProps) {
 
   const handleClear = useCallback(() => {
     setQuery('');
-    setResults([]);
+    setDebouncedQuery('');
+    setActiveIndex(-1);
     setIsOpen(false);
     inputRef.current?.focus();
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
+    setActiveIndex(-1);
     setIsOpen(true);
   };
 
@@ -104,16 +109,37 @@ export function SearchBar({ placeholder = '搜索文章...' }: SearchBarProps) {
   };
 
   const handleResultClick = useCallback(() => {
+    onNavigate?.();
     setIsOpen(false);
     setQuery('');
-    setResults([]);
-  }, []);
+    setDebouncedQuery('');
+    setActiveIndex(-1);
+  }, [onNavigate]);
 
   const hasQuery = query.trim().length > 0;
-  const showResults = isOpen && (hasQuery || results.length > 0);
+  const showResults = isOpen && hasQuery;
+  const isSearching = query.trim().toLowerCase() !== debouncedQuery;
+  const selectedIndex = activeIndex < results.length ? activeIndex : -1;
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (isLoading || isSearching || !hasQuery || results.length === 0) return;
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      setIsOpen(true);
+      const step = event.key === 'ArrowDown' ? 1 : -1;
+      setActiveIndex(index => index < 0
+        ? (step > 0 ? 0 : results.length - 1)
+        : (index + step + results.length) % results.length);
+    } else if (event.key === 'Enter' && showResults && selectedIndex >= 0) {
+      event.preventDefault();
+      const article = results[selectedIndex];
+      router.push(`/${article.category}/${encodeURIComponent(article.slug)}`);
+      handleResultClick();
+    }
+  };
 
   return (
-    <div className="search-container" ref={searchContainerRef}>
+    <div className={`search-container ${styles.root}`} ref={searchContainerRef}>
       <div className={`search-bar ${isOpen ? 'open' : ''}`}>
         <div className="search-input-wrapper">
           <Search size={18} className="search-icon" />
@@ -123,11 +149,15 @@ export function SearchBar({ placeholder = '搜索文章...' }: SearchBarProps) {
             value={query}
             onChange={handleInputChange}
             onFocus={handleInputFocus}
+            onKeyDown={handleKeyDown}
             placeholder={placeholder}
             className="search-input"
             aria-label="搜索文章"
-            aria-expanded={isOpen}
-            aria-controls="search-results-list"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded={showResults}
+            aria-controls={showResults ? resultsId : undefined}
+            aria-activedescendant={showResults && !isSearching && selectedIndex >= 0 ? `${resultsId}-${selectedIndex}` : undefined}
             autoComplete="off"
           />
           {query && (
@@ -146,10 +176,13 @@ export function SearchBar({ placeholder = '搜索文章...' }: SearchBarProps) {
         {showResults && (
           <div
             className="search-results"
-            id="search-results-list"
+            id={resultsId}
+            aria-label="文章搜索结果"
             role="listbox"
           >
-            {isLoading ? (
+            {loadError ? (
+              <div className="search-results-empty">搜索暂时不可用，请刷新重试。</div>
+            ) : isLoading || isSearching ? (
               <div className="search-results-empty">
                 加载中...
               </div>
@@ -166,7 +199,9 @@ export function SearchBar({ placeholder = '搜索文章...' }: SearchBarProps) {
                       className="search-result-item"
                       onClick={handleResultClick}
                       role="option"
-                      tabIndex={index}
+                      id={`${resultsId}-${index}`}
+                      aria-selected={selectedIndex === index}
+                      tabIndex={0}
                     >
                       <div className="search-result-category">
                         {getCategoryName(article.category)}

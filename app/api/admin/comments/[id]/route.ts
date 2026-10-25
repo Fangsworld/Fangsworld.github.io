@@ -1,18 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { approveComment, rejectComment, deleteComment, getPendingComments } from '@/db/queries';
+import { requireAdmin } from '@/lib/admin-auth.server';
 
 // 管理员审核评论的 API
-// 注意：实际生产环境需要添加身份验证
+// 所有管理操作先验证服务端 Bearer token，再访问数据库。
 
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const rejection = requireAdmin(request);
+  if (rejection) return rejection;
+
   try {
     const { id } = await params;
-    const commentId = parseInt(id);
+    const commentId = Number(id);
 
-    if (isNaN(commentId)) {
+    if (!/^\d+$/.test(id) || !Number.isSafeInteger(commentId) || commentId <= 0) {
       return NextResponse.json(
         { error: 'Invalid comment ID' },
         { status: 400 }
@@ -22,6 +25,7 @@ export async function PATCH(
     const body = await request.json();
     const { action } = body;
 
+    const { approveComment, rejectComment } = await import('@/db/queries');
     if (action === 'approve') {
       const comment = await approveComment(commentId);
       return NextResponse.json({ comment, message: '评论已批准' });
@@ -47,17 +51,21 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const rejection = requireAdmin(request);
+  if (rejection) return rejection;
+
   try {
     const { id } = await params;
-    const commentId = parseInt(id);
+    const commentId = Number(id);
 
-    if (isNaN(commentId)) {
+    if (!/^\d+$/.test(id) || !Number.isSafeInteger(commentId) || commentId <= 0) {
       return NextResponse.json(
         { error: 'Invalid comment ID' },
         { status: 400 }
       );
     }
 
+    const { deleteComment } = await import('@/db/queries');
     const comment = await deleteComment(commentId);
     return NextResponse.json({ comment, message: '评论已删除' });
   } catch (error) {

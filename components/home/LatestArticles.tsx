@@ -1,43 +1,7 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import { ArticleMetadata } from '@/types/article';
-import { ArticleCard } from '@/components/articles/ArticleCard';
+import { ArticleList } from '@/components/articles/ArticleList';
 
-interface LatestArticlesProps {
-  articles: ArticleMetadata[];
-}
-
-export function LatestArticles({ articles: initialArticles }: LatestArticlesProps) {
-  const [articles, setArticles] = useState<ArticleMetadata[]>(initialArticles);
-
-  // 客户端获取浏览量数据
-  useEffect(() => {
-    async function loadViews() {
-      try {
-        const slugs = articles.map(a => encodeURIComponent(a.slug));
-        const response = await fetch(`/api/articles/batch-stats?slugs=${slugs.join(',')}`);
-        if (response.ok) {
-          const data = await response.json();
-          const stats = data.stats || [];
-          const statsMap = new Map(stats.map((s: { slug: string; views: number }) => [s.slug, s.views]));
-
-          setArticles(prev => prev.map(article => {
-            const viewCount = statsMap.get(encodeURIComponent(article.slug));
-            return {
-              ...article,
-              views: typeof viewCount === 'number' ? viewCount : (article.views ?? 0),
-            };
-          }));
-        }
-      } catch (error) {
-        console.error('Failed to load views:', error);
-      }
-    }
-
-    loadViews();
-  }, [initialArticles]);
-
+export function LatestArticles({ articles }: { articles: ArticleMetadata[] }) {
   return (
     <section className="latest-section">
       <div className="container">
@@ -45,11 +9,7 @@ export function LatestArticles({ articles: initialArticles }: LatestArticlesProp
           <h2 className="section-title">最近更新</h2>
           <p className="section-subtitle">分享最新的思考与创作</p>
         </div>
-        <div className="latest-articles">
-          {articles.map((article) => (
-            <ArticleCard key={`${article.category}-${article.slug}`} article={article} />
-          ))}
-        </div>
+        <ArticleList articles={articles} className="latest-articles" />
       </div>
     </section>
   );

@@ -1,0 +1,620 @@
+/* Component-scoped styles; existing descendant names stay inside the local root. */
+
+.root :global(.article-stats) {
+  display: flex;
+  gap: 1.5rem;
+  margin: 1.5rem 0 2rem;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.root :global(.stat-item) {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-secondary);
+  font-size: 0.8125rem;
+  transition: color 0.2s ease;
+}
+
+.root :global(.stat-item:hover) {
+  color: var(--color-accent);
+}
+
+.root :global(.stat-item.liked) {
+  color: #ef4444;
+}
+
+.root :global(.article-stats-bar) {
+  max-width: 700px;
+  margin: 1.5rem auto;
+}
+
+.root :global(.article-stats) {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.root :global(.stat-item) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--color-text-secondary);
+  font-size: 0.8125rem;
+  transition: color 0.2s ease;
+  font-weight: 400;
+}
+
+.root :global(.stat-item.clickable) {
+  cursor: pointer;
+}
+
+.root :global(.stat-item.clickable:hover) {
+  color: var(--color-accent);
+}
+
+.root :global(.stat-item.liked) {
+  color: #ef4444;
+}
+
+.root :global(.stat-item.liked:hover) {
+  color: #dc2626;
+}
+
+.root :global(.stat-item.animate) {
+  animation: likeBounce 0.6s ease;
+}
+
+@keyframes likeBounce {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(0.95); }
+  75% { transform: scale(1.05); }
+}
+
+.root :global(.stat-item svg) {
+  flex-shrink: 0;
+}
+
+.root :global(.stat-item span) {
+  font-weight: 500;
+}
+
+.root :global(.stat-item.skeleton span) {
+  min-width: 24px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.root:global(.comments-section) {
+  max-width: 700px;
+  margin: 1.5rem auto 0;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.root :global(.comments-header) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.root :global(.comments-stats) {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.root :global(.btn-write-comment) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--color-accent);
+  color: #ffffff;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.root :global(.btn-write-comment:hover) {
+  background: #0f9e8b;
+  transform: translateY(-1px);
+}
+
+.root :global(.status-message) {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1rem;
+  font-size: 0.9375rem;
+  animation: slideInDown 0.3s ease;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.root :global(.status-message.success) {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #4ade80;
+}
+
+.root :global(.status-message.error) {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+.root :global(.comment-form-wrapper) {
+  margin-bottom: 2rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.root :global(.reply-banner) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  background: rgba(12, 191, 160, 0.1);
+  border: 1px solid rgba(12, 191, 160, 0.3);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  font-size: 0.875rem;
+  color: var(--color-accent);
+}
+
+.root :global(.btn-cancel-reply) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.root :global(.btn-cancel-reply:hover) {
+  background: rgba(12, 191, 160, 0.2);
+}
+
+.root :global(.comment-form) {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+}
+
+.root :global(.comment-form:has(.reply-banner)) {
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  border-top: none;
+}
+
+.root :global(.form-row) {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.root :global(.form-group) {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.root :global(.form-group label) {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.root :global(.form-group .required) {
+  color: #ef4444;
+  margin-left: 2px;
+}
+
+.root :global(.form-group input),
+.root :global(.form-group textarea) {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.root :global(.form-group input:focus),
+.root :global(.form-group textarea:focus) {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(12, 191, 160, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.root :global(.form-group input::placeholder),
+.root :global(.form-group textarea::placeholder) {
+  color: var(--color-text-muted);
+}
+
+.root :global(.form-group.has-error input),
+.root :global(.form-group.has-error textarea) {
+  border-color: #ef4444;
+}
+
+.root :global(.form-group.has-error input:focus),
+.root :global(.form-group.has-error textarea:focus) {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.root :global(.form-group.is-valid input),
+.root :global(.form-group.is-valid textarea) {
+  border-color: #22c55e;
+}
+
+.root :global(.form-group textarea) {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.5;
+}
+
+.root :global(.form-footer) {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.root :global(.char-count) {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-left: auto;
+}
+
+.root :global(.char-count.warning) {
+  color: #f59e0b;
+  font-weight: 500;
+}
+
+.root :global(.error-message) {
+  color: #ef4444;
+  font-size: 0.8125rem;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.root :global(.form-actions) {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.root :global(.btn-cancel),
+.root :global(.btn-submit) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.root :global(.btn-cancel) {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-primary);
+}
+
+.root :global(.btn-cancel:hover:not(:disabled)) {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.root :global(.btn-submit) {
+  background: var(--color-accent);
+  color: #ffffff;
+}
+
+.root :global(.btn-submit:hover:not(:disabled)) {
+  background: #0f9e8b;
+  transform: translateY(-1px);
+}
+
+.root :global(.btn-cancel:disabled),
+.root :global(.btn-submit:disabled) {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.root :global(.comments-list-container) {
+  min-height: 200px;
+}
+
+.root :global(.comments-skeleton) {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.root :global(.comment-skeleton-item) {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+}
+
+.root :global(.skeleton-avatar) {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.root :global(.skeleton-content) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.root :global(.skeleton-header) {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.root :global(.skeleton-name) {
+  width: 120px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.root :global(.skeleton-date) {
+  width: 80px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  animation: pulse 1.5s ease-in-out infinite 0.2s;
+}
+
+.root :global(.skeleton-text) {
+  width: 100%;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  animation: pulse 1.5s ease-in-out infinite 0.3s;
+}
+
+.root :global(.skeleton-text.short) {
+  width: 60%;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+.root :global(.comments-list) {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.root :global(.comment-item) {
+  display: flex;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  transition: all 0.2s ease;
+  animation: fadeIn 0.3s ease;
+}
+
+.root :global(.comment-item:hover) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.root :global(.comment-avatar) {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(12, 191, 160, 0.2);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.root :global(.comment-body) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.root :global(.comment-header) {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.root :global(.comment-author) {
+  font-weight: 500;
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+}
+
+.root :global(.comment-date) {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  cursor: help;
+}
+
+.root :global(.comment-content) {
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-weight: 400;
+}
+
+.root :global(.comment-actions) {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.root :global(.btn-reply) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.root :global(.btn-reply:hover) {
+  background: rgba(12, 191, 160, 0.1);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.root :global(.no-comments) {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--color-text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.root :global(.no-comments svg) {
+  opacity: 0.3;
+}
+
+.root :global(.no-comments p) {
+  font-size: 0.9375rem;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .root :global(.article-stats-bar),
+  .root:global(.comments-section) {
+    padding: 0 1rem;
+  }
+
+  .root :global(.article-stats) {
+    gap: 1rem;
+  }
+
+  .root :global(.stat-item) {
+    font-size: 0.75rem;
+  }
+
+  .root :global(.stat-item svg) {
+    width: 14px;
+    height: 14px;
+  }
+
+  .root :global(.comments-header) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .root :global(.btn-write-comment) {
+    align-self: flex-start;
+  }
+
+  .root :global(.form-row) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .root :global(.comment-form) {
+    padding: 1rem;
+  }
+
+  .root :global(.comment-item) {
+    padding: 1rem;
+  }
+
+  .root :global(.comment-avatar) {
+    width: 32px;
+    height: 32px;
+  }
+
+  .root :global(.comment-avatar svg) {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .root :global(.article-stats) {
+    gap: 0.75rem;
+  }
+
+  .root :global(.stat-item) {
+    font-size: 0.75rem;
+  }
+
+  .root :global(.stat-item svg) {
+    width: 14px;
+    height: 14px;
+  }
+}

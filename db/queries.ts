@@ -1,6 +1,6 @@
 import { db } from './index';
 import { articles, comments, likes } from './schema';
-import { eq, desc, count, and, sql, inArray } from 'drizzle-orm';
+import { eq, desc, and, sql, inArray } from 'drizzle-orm';
 
 // 辅助函数：获取数据库实例
 function getDb() {

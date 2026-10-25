@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint app components lib db types tests",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:migrate": "drizzle-kit migrate",
@@ -16,7 +16,14 @@
     "db:health": "npx tsx scripts/db-health.ts",
     "db:migrate-check": "npx tsx scripts/db-migrate-check.ts",
     "stats:view": "npx tsx scripts/view-stats.ts",
-    "db:migrate-categories": "npx tsx scripts/migrate-categories.ts"
+    "db:migrate-categories": "npx tsx scripts/migrate-categories.ts",
+    "dev:offline": "DISABLE_DATABASE=true next dev",
+    "build:offline": "DISABLE_DATABASE=true next build",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run lint",
+    "test:auth": "node --test tests/admin-auth.test.mjs",
+    "test:static": "node --test tests/static-routes.test.mjs",
+    "verify": "npm run lint && npm run test:auth && npm run build:offline && npm run typecheck && npm run test:static"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
