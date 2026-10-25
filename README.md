@@ -11,13 +11,15 @@ npm ci
 npm run dev:offline   # 不连接数据库，适合文章、布局和样式预览
 npm run dev           # 启用已配置的数据库功能
 npm run check         # 快速检查：TypeScript 与应用 lint
-npm run verify        # 完整验证：lint、鉴权测试、离线构建、类型检查、静态路由测试
+npm run verify        # 完整验证：内容检查及测试、lint、鉴权测试、离线构建、类型检查、静态路由测试
 npm run build:offline # 不依赖数据库的生产构建
 npm run build
 npm start
 ```
 
 `npm run verify` 按顺序运行，任一步失败即停止；先完成离线构建再检查生成的路由类型和预渲染清单。`test:static` 依赖刚生成的 `.next/prerender-manifest.json`，不要用历史构建结果代替本次验证。完整验证不连接生产数据库，但会更新本地构建产物。
+
+新增或编辑文章后可先运行 `npm run check:content`，检查已发布分类的元数据、真实日期及路由冲突；`npm run test:content` 验证检查工具。历史重复 ID 仅提醒，现有链接仍由文件名决定；不要直接重命名已有文章来消除提醒。
 
 不要在每次 CSS 修改后重新 build；保持开发服务器运行，通过热更新预览。`scripts/` 是独立维护工具，不在日常应用类型检查范围内；修改这些脚本时单独运行相应验证。
 

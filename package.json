@@ -23,7 +23,9 @@
     "check": "npm run typecheck && npm run lint",
     "test:auth": "node --test tests/admin-auth.test.mjs",
     "test:static": "node --test tests/static-routes.test.mjs",
-    "verify": "npm run lint && npm run test:auth && npm run build:offline && npm run typecheck && npm run test:static"
+    "verify": "npm run check:content && npm run test:content && npm run lint && npm run test:auth && npm run build:offline && npm run typecheck && npm run test:static",
+    "check:content": "node scripts/validate-content.mjs",
+    "test:content": "node --test scripts/validate-content.test.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
