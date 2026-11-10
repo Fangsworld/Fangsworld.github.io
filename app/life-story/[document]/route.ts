@@ -21,11 +21,7 @@ const pages = {
 <p>反馈时可以附上 App 版本、iOS 版本和复现步骤。请勿提供账户密码、验证码或付款信息。</p>` },
 } as const
 
-export const dynamicParams = false
-
-export function generateStaticParams() {
-  return [{ document: 'privacy' }, { document: 'support' }]
-}
+export const dynamic = 'force-dynamic'
 
 export async function GET(
   _request: Request,
