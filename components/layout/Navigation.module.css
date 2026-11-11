@@ -51,6 +51,7 @@
   padding: var(--space-xs) var(--space-sm);
   color: var(--color-text-secondary);
   text-decoration: none;
+  white-space: nowrap;
   font-weight: 400;
   border-radius: var(--radius-md);
   transition: var(--transition-fast);
@@ -131,6 +132,7 @@
   bottom: 0;
   background: var(--glass-bg);
   backdrop-filter: blur(24px);
+  overflow-y: auto;
   transform: translateX(100%);
   transition: var(--transition-smooth);
   z-index: 99;
@@ -168,7 +170,7 @@
   font-weight: 500;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 960px) {
   .root :global(.nav-menu) {
     display: none;
   }
@@ -184,7 +186,7 @@
   max-width: 400px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 960px) {
   .root :global(.nav-actions) {
     display: none;
   }

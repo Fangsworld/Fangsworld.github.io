@@ -1,8 +1,8 @@
 import { CategoryHeader } from '@/components/articles/CategoryHeader';
 import { ArticleList } from '@/components/articles/ArticleList';
-import { getArticlesByCategoryCached } from '@/lib/cache';
-import { Category, CATEGORIES, CATEGORY_NAMES } from '@/types/article';
-import { notFound } from 'next/navigation';
+import { getAllArticlesCached, getArticlesByCategoryCached } from '@/lib/cache';
+import { Category, CATEGORIES, CATEGORY_NAMES, ESSAY_CATEGORIES } from '@/types/article';
+import { notFound, permanentRedirect } from 'next/navigation';
 
 export default async function CategoryPage({
   params,
@@ -16,10 +16,16 @@ export default async function CategoryPage({
     notFound();
   }
 
-  const articles = getArticlesByCategoryCached(category);
+  if (category !== 'essays' && ESSAY_CATEGORIES.includes(category)) {
+    permanentRedirect('/essays');
+  }
+
+  const articles = category === 'essays'
+    ? getAllArticlesCached().filter((article) => ESSAY_CATEGORIES.includes(article.category))
+    : getArticlesByCategoryCached(category);
 
   return (
-    <div className="container">
+    <div className="container section-page">
       <CategoryHeader category={category} />
       <ArticleList articles={articles} className="articles-grid" />
     </div>

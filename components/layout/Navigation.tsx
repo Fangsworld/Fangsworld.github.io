@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { Menu } from 'lucide-react';
+import { ESSAY_CATEGORIES } from '@/types/article';
 import styles from './Navigation.module.css';
 import { SearchBar } from '@/components/search/SearchBar';
 
@@ -14,13 +15,11 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { href: '/', label: '主页', key: 'home' },
+  { href: '/', label: '首页', key: 'home' },
   { href: '/ai', label: 'AI', key: 'ai' },
-  { href: '/society', label: '社会', key: 'society' },
-  { href: '/science', label: '科学', key: 'science' },
-  { href: '/health', label: '健康', key: 'health' },
-  { href: '/essays', label: '随感', key: 'essays' },
   { href: '/products', label: '产品', key: 'products' },
+  { href: '/essays', label: '随感', key: 'essays' },
+  { href: '/projects', label: '项目', key: 'projects' },
 ];
 
 export function Navigation() {
@@ -31,7 +30,10 @@ export function Navigation() {
     if (href === '/') {
       return pathname === '/';
     }
-    return pathname.startsWith(href);
+    if (href === '/essays') {
+      return ESSAY_CATEGORIES.some((category) => pathname.split('/')[1] === category);
+    }
+    return pathname === href || pathname.startsWith(`${href}/`);
   };
 
   return (
@@ -49,6 +51,7 @@ export function Navigation() {
                 <Link
                   key={item.key}
                   href={item.href}
+                  aria-current={isActive(item.href) ? 'page' : undefined}
                   className={`nav-link ${isActive(item.href) ? 'active' : ''}`}
                 >
                   {item.label}
@@ -79,6 +82,7 @@ export function Navigation() {
             <Link
               key={item.key}
               href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
               className={`mobile-link ${isActive(item.href) ? 'active' : ''}`}
               onClick={() => setMobileMenuOpen(false)}
             >

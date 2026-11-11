@@ -35,3 +35,5 @@ export function getCategoryName(category: Category): string {
 
 // 所有分类列表
 export const CATEGORIES: Category[] = ['ai', 'society', 'science', 'health', 'essays', 'products'];
+
+export const ESSAY_CATEGORIES: readonly Category[] = ['essays', 'society', 'science', 'health'];
