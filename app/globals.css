@@ -294,20 +294,3 @@ body:has(.hero-section) .background-decoration {
   backdrop-filter: none;
   margin-inline: 0;
 }
-
-.latest-articles .article-card {
-  background: var(--color-surface);
-  border-color: var(--color-border);
-  box-shadow: none;
-  backdrop-filter: none;
-}
-
-.latest-articles .article-card::before {
-  display: none;
-}
-
-.latest-articles .article-card:hover,
-.latest-articles .article-card:focus-visible {
-  border-color: #557268;
-  transform: none;
-}
