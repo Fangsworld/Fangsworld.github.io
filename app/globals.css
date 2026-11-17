@@ -3,6 +3,7 @@
 :root {
 
   --color-primary: #fffffb;
+  --color-reading-bg: #faf8f3;
   --color-primary-dark: #3b2418;
   --color-accent: #0cbfa0;
   --color-accent-secondary: #e74267;
@@ -150,42 +151,14 @@ a {
   font-size: 0.6875rem;
   text-transform: uppercase;
   letter-spacing: 0.4px;
-}
-
-.article-category.ai {
-  background: rgba(12, 191, 160, 0.2);
-  color: var(--color-accent);
-}
-
-.article-category.society {
-  background: rgba(231, 66, 103, 0.2);
-  color: var(--color-accent-secondary);
-}
-
-.article-category.science {
-  background: rgba(231, 192, 0, 0.2);
-  color: var(--color-accent-tertiary);
-}
-
-.article-category.health {
-  background: rgba(38, 172, 158, 0.2);
-  color: var(--color-accent-quaternary);
-}
-
-.article-category.essays {
-  background: rgba(139, 92, 246, 0.2);
-  color: #8B5CF6;
-}
-
-.article-category.products {
-  background: rgba(99, 102, 241, 0.2);
-  color: #6366F1;
+  background: #e9efeb;
+  color: #355b4e;
 }
 
 .tag {
   padding: 2px 6px;
-  background: rgba(12, 191, 160, 0.1);
-  color: var(--color-accent);
+  background: #f0ede7;
+  color: var(--color-text-secondary);
   border-radius: var(--radius-sm);
   font-size: 0.625rem;
   font-weight: 400;
@@ -305,4 +278,36 @@ body.article-page-active .site-footer {
 
 .back-button:hover {
   color: var(--color-accent);
+}
+
+/* Match the article reading surface on the home page. */
+body:has(.hero-section) {
+  background: var(--color-reading-bg);
+}
+
+body:has(.hero-section) .background-decoration {
+  display: none;
+}
+
+.latest-section {
+  background: transparent;
+  backdrop-filter: none;
+  margin-inline: 0;
+}
+
+.latest-articles .article-card {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.latest-articles .article-card::before {
+  display: none;
+}
+
+.latest-articles .article-card:hover,
+.latest-articles .article-card:focus-visible {
+  border-color: #557268;
+  transform: none;
 }
