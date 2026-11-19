@@ -27,11 +27,11 @@ export default async function ProjectPage({ params }: Props) {
   return (
     <div className={styles.page}>
       <Link className={styles.backLink} href="/projects">
-        <ArrowLeft size={16} aria-hidden="true" /> 返回项目
+        <ArrowLeft size={16} aria-hidden="true" /> 返回作品
       </Link>
       <article className={styles.detail}>
         <header className={styles.heading}>
-          <p className={styles.label}>{project.platform} · 项目介绍</p>
+          <p className={styles.label}>{project.platform} · 作品介绍</p>
           <h1>{project.name}</h1>
           <p>{project.overview ?? project.description}</p>
         </header>

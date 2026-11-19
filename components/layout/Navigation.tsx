@@ -19,7 +19,7 @@ const navItems: NavItem[] = [
   { href: '/ai', label: 'AI', key: 'ai' },
   { href: '/products', label: '产品', key: 'products' },
   { href: '/essays', label: '随感', key: 'essays' },
-  { href: '/projects', label: '项目', key: 'projects' },
+  { href: '/projects', label: '作品', key: 'projects' },
 ];
 
 export function Navigation() {

@@ -6,8 +6,8 @@ import articleCard from '@/components/articles/ArticleCard.module.css';
 import styles from './projects.module.css';
 
 export const metadata: Metadata = {
-  title: '项目 - 宇文平野',
-  description: '宇文平野的个人项目，包括迷宫英语、人生故事和其他应用原型。',
+  title: '作品 - 宇文平野',
+  description: '宇文平野的个人作品，包括迷宫英语、人生故事和其他应用原型。',
 };
 
 export default function ProjectsPage() {
