@@ -15,7 +15,6 @@ export default function ProjectsPage() {
   return (
     <div className={`container section-page ${styles.collection}`}>
       <header className={styles.intro}>
-        <h1>把想法做成日常可用的工具。</h1>
         <span>{projects.length} 件作品 · 持续打磨中</span>
       </header>
       <nav className={styles.categoryNav} aria-label="作品分类">
