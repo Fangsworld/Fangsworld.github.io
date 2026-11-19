@@ -44,13 +44,16 @@ function ProjectCard({ project }: { project: Project }) {
   return (
     <Link className={styles.workCard} href={`/projects/${project.slug}`} style={{ '--project-color': project.color } as CSSProperties}>
       <div className={styles.cardTop}>
-        {project.icon ? <Image className={styles.appIcon} src={project.icon} width={64} height={64} alt="" /> : <span className={styles.colorMark} aria-hidden="true" />}
-        <span className={styles.platformText}>{project.platform}</span>
+        <div className={styles.platformTags}>
+          {project.platform.split(' / ').map(platform => <span key={platform} className={styles.platformText}>{platform}</span>)}
+        </div>
         <ArrowUpRight className={styles.cardArrow} size={19} aria-hidden="true" />
       </div>
-      <h3>{project.name}</h3>
+      <div className={styles.cardTitle}>
+        {project.icon && <Image className={styles.appIcon} src={project.icon} width={44} height={44} alt="" />}
+        <h3>{project.name}</h3>
+      </div>
       <p>{project.description}</p>
-      <span className={styles.cardLink}>了解作品 <span aria-hidden="true">↗</span></span>
     </Link>
   );
 }
