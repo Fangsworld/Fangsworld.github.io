@@ -31,6 +31,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: 'maze-english',
+    icon: '/images/works/maze-english.png',
     category: '英语学习',
     name: '迷宫英语',
     platform: 'Web / iPhone / macOS',
@@ -81,12 +82,13 @@ export const projects: Project[] = [
   },
   {
     slug: 'note-keyboard',
+    icon: '/images/works/note-keyboard.png',
     category: '写作训练',
-    name: '笔记输入法',
+    name: '言界输入法',
     platform: 'iPhone',
     color: '#4f5fa3',
     description: '为 iPhone 上的日常中英混输设计。写中文时，可以顺手输入英文缩写、数字和标点。',
-    overview: '在 iPhone 上回消息或记东西，一句话里常常会夹着英文缩写、数字和标点。笔记输入法从这些常见场景入手，把拼音、候选词和基本编辑放在同一套键盘里，减少来回切换。',
+    overview: '在 iPhone 上回消息或记东西，一句话里常常会夹着英文缩写、数字和标点。言界输入法从这些常见场景入手，把拼音、候选词和基本编辑放在同一套键盘里，减少来回切换。',
     features: [
       '支持中文拼音、英文、数字和标点。',
       '中文模式下可用 Shift 输入大写字母，方便输入 GitHub、API 等常见写法。',
@@ -95,6 +97,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'liantule',
+    icon: '/images/works/liantule.png',
     category: '英语学习',
     name: '练吐了',
     platform: 'iPhone',
@@ -104,6 +107,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'encounter',
+    icon: '/images/works/encounter.png',
     category: '英语学习',
     name: '遇见',
     platform: 'iPhone / iPad',
@@ -113,6 +117,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'listening',
+    icon: '/images/works/listening.png',
     category: '英语学习',
     name: '倾听',
     platform: 'iPhone / iPad',
@@ -122,6 +127,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'wordplay',
+    icon: '/images/works/wordplay.png',
     category: '英语学习',
     name: '文字之谜',
     platform: 'iPhone / iPad',
@@ -141,8 +147,9 @@ export const projects: Project[] = [
   },
   {
     slug: 'shiye',
+    icon: '/images/works/shiye.png',
     category: '知识库管理',
-    name: '随手存',
+    name: '余音',
     platform: 'iPhone',
     color: '#a15b24',
     description: '收藏读到的文章，集中整理、阅读和回顾。',
@@ -150,6 +157,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'pocket-cinema',
+    icon: '/images/works/pocket-cinema.png',
     category: '写作训练',
     name: '脑洞片场',
     platform: 'iPhone',
@@ -159,6 +167,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'yanjie',
+    icon: '/images/works/yanjie.png',
     category: '写作训练',
     name: '言界写作',
     platform: 'macOS',
@@ -168,6 +177,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'maze-quant',
+    icon: '/images/works/maze-quant.png',
     category: '信息分析',
     name: '迷宫量化',
     platform: 'Web / iPhone / macOS',
@@ -177,6 +187,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'shannian',
+    icon: '/images/works/shannian.png',
     category: '写作训练',
     name: '闪念',
     platform: 'iPhone',
@@ -186,8 +197,9 @@ export const projects: Project[] = [
   },
   {
     slug: 'zhiku',
+    icon: '/images/works/zhiku.png',
     category: '知识库管理',
-    name: '知库 Zhiku',
+    name: '知库',
     platform: 'macOS / Web',
     color: '#286957',
     description: '把笔记和网页剪藏整理成可搜索的本地 Markdown 知识库。',
@@ -195,6 +207,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'logic-playground',
+    icon: '/images/works/logic-playground.png',
     category: '逻辑分析',
     name: '逻辑游乐场',
     platform: 'iPhone',
@@ -204,6 +217,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'logic-map',
+    icon: '/images/works/logic-map.png',
     category: '逻辑分析',
     name: '逻辑双线地图',
     platform: 'macOS',

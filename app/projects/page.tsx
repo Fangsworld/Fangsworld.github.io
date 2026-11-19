@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import type { CSSProperties } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+import articleCard from '@/components/articles/ArticleCard.module.css';
 import { projectCategories, projects, type Project } from '@/lib/projects';
 import styles from './projects.module.css';
 
@@ -31,7 +31,7 @@ export default function ProjectsPage() {
             <h2>{category}</h2>
             <span>{String(projects.filter(p => p.category === category).length).padStart(2, '0')}</span>
           </div>
-          <div className={styles.worksGrid}>
+          <div className="articles-grid">
             {projects.filter(p => p.category === category).map(project => <ProjectCard key={project.slug} project={project} />)}
           </div>
         </section>
@@ -42,18 +42,15 @@ export default function ProjectsPage() {
 
 function ProjectCard({ project }: { project: Project }) {
   return (
-    <Link className={styles.workCard} href={`/projects/${project.slug}`} style={{ '--project-color': project.color } as CSSProperties}>
-      <div className={styles.cardTop}>
-        <div className={styles.platformTags}>
-          {project.platform.split(' / ').map(platform => <span key={platform} className={styles.platformText}>{platform}</span>)}
-        </div>
-        <ArrowUpRight className={styles.cardArrow} size={19} aria-hidden="true" />
+    <Link className={`article-card ${articleCard.root} ${styles.projectCard}`} href={`/projects/${project.slug}`} style={{ '--project-color': project.color } as CSSProperties}>
+      <div className={`article-meta ${styles.platformTags}`}>
+        {project.platform.split(' / ').map(platform => <span key={platform} className={`article-category ${styles.platform}`}>{platform}</span>)}
       </div>
       <div className={styles.cardTitle}>
         {project.icon && <Image className={styles.appIcon} src={project.icon} width={44} height={44} alt="" />}
-        <h3>{project.name}</h3>
+        <h3 className="article-title">{project.name}</h3>
       </div>
-      <p>{project.description}</p>
+      <p className="article-excerpt">{project.description}</p>
     </Link>
   );
 }
