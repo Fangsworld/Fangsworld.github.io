@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { projects } from '@/lib/projects';
@@ -31,6 +32,7 @@ export default async function ProjectPage({ params }: Props) {
       </Link>
       <article className={styles.detail}>
         <header className={styles.heading}>
+          {project.icon && <Image className={styles.detailIcon} src={project.icon} width={80} height={80} alt="" />}
           <p className={styles.label}>{project.platform} · 作品介绍</p>
           <h1>{project.name}</h1>
           <p>{project.overview ?? project.description}</p>

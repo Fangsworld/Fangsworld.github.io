@@ -21,6 +21,7 @@ export type Project = {
   color: string;
   description: string;
   overview?: string;
+  icon?: string;
   features: string[];
   publicUrl?: string;
   localUrl?: string;
@@ -48,8 +49,9 @@ export const projects: Project[] = [
     slug: 'life-story',
     category: '个人管理',
     name: '人生故事',
+    icon: '/images/works/life-story.png',
     platform: 'iPhone',
-    color: '#a24d35',
+    color: '#776b45',
     description: '选出今天最重要的事，专注做一段，记下实际进展。每天留下一点可以回看的故事。',
     overview: '人生故事把计划、行动和回顾放在同一天里。早上选出今天最重要的事，做的时候留一段专注时间，结束后记下推进了什么。过一阵再翻回来，可以看到某件事是怎么一步步做成的。',
     features: [
@@ -65,11 +67,12 @@ export const projects: Project[] = [
   {
     slug: 'family-files',
     category: '个人管理',
-    name: '收好',
+    name: '小团圆',
+    icon: '/images/works/xiaotuanyuan.png',
     platform: 'iPhone',
-    color: '#ad4162',
+    color: '#a96d43',
     description: '整理 iPhone 相册里的相似照片、截图和重要资料。挑出想留的照片，找回需要的文件。',
-    overview: '收好有两个入口。「相册」把相似照片和截图分组，方便一起看、挑选和收藏。「资料」从已授权的照片中识别证件、病历等文件，核对归档后可以按文字找回来。识别在设备上完成，删除照片由你确认。',
+    overview: '小团圆有两个入口。「相册」把相似照片和截图分组，方便一起看、挑选和收藏。「资料」从已授权的照片中识别证件、病历等文件，核对归档后可以按文字找回来。识别在设备上完成，删除照片由你确认。',
     features: [
       '浏览自动分组的照片，收藏喜欢的照片，也可以纠正分组。',
       '识别照片里的文字，核对后将重要资料归档。',
@@ -129,9 +132,10 @@ export const projects: Project[] = [
   {
     slug: 'milo',
     category: '个人管理',
-    name: 'Milo 米洛',
+    name: '一念 · One Thought',
+    icon: '/images/works/one-thought.png',
     platform: 'iPhone',
-    color: '#2d7358',
+    color: '#293f65',
     description: '把日常问答、写作和联网研究放进一个对话界面。',
     features: ['按任务选择直接回答或联网研究。', '查看来源与执行过程，从历史对话继续追问。'],
   },
