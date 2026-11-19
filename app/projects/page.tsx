@@ -14,9 +14,7 @@ export const metadata: Metadata = {
 export default function ProjectsPage() {
   return (
     <div className={`container section-page ${styles.collection}`}>
-      <header className={styles.intro}>
-        <span>{projects.length} 件作品 · 持续打磨中</span>
-      </header>
+      <div className={styles.collectionBar}>
       <nav className={styles.categoryNav} aria-label="作品分类">
         {projectCategories.map((category, index) => (
           <a href={`#collection-${index}`} key={category}>
@@ -24,6 +22,8 @@ export default function ProjectsPage() {
           </a>
         ))}
       </nav>
+      <span className={styles.workCount}>{projects.length} 件作品</span>
+      </div>
       {projectCategories.map((category, index) => (
         <section id={`collection-${index}`} key={category} className={styles.category}>
           <div className={styles.categoryHeading}>
