@@ -6,6 +6,11 @@ export function Footer() {
           <div className="footer-info">
             <p>&copy; 2025 宇文平野的个人空间. All rights reserved.</p>
             <p className="footer-tagline">思维与写作 · 理性与感性</p>
+            <p>
+              <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">
+                粤ICP备2026184450号
+              </a>
+            </p>
           </div>
         </div>
       </div>
