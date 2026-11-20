@@ -42,4 +42,9 @@ export const socialAccounts: SocialAccount[] = [
     url: 'https://www.youtube.com/@%E5%BB%96%E8%8A%B3-f3l',
     logo: '/images/social/platforms/youtube.svg', followers: 1, followerLabel: '订阅者',
   },
+  {
+    platform: '微博', name: '宇文平野', bio: '微博账号：liaofang415',
+    url: 'https://weibo.com/u/1896953301',
+    logo: '/images/social/platforms/weibo.svg', followers: 183,
+  },
 ];

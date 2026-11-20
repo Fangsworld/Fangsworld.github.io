@@ -5,3 +5,5 @@
 - Zhihu, Xiaohongshu, Bilibili and YouTube: Simple Icons SVGs from https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/ (saved locally, brand colors applied).
 
 Retrieved 2026-11-20. These identify the linked platforms, not the account owner's avatar.
+
+- Weibo: Simple Icons `sinaweibo.svg`, brand color #E6162D.
