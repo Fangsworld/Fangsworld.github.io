@@ -294,3 +294,13 @@ body:has(.hero-section) .background-decoration {
   backdrop-filter: none;
   margin-inline: 0;
 }
+
+.police-registration {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.police-registration img {
+  flex-shrink: 0;
+}

@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export function Footer() {
   return (
     <footer className="site-footer">
@@ -9,6 +11,17 @@ export function Footer() {
             <p>
               <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">
                 粤ICP备2026184450号
+              </a>
+            </p>
+            <p>
+              <a
+                className="police-registration"
+                href="https://beian.mps.gov.cn/#/query/webSearch?code=44011302006222"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image src="/images/beian-police.png" alt="" width={18} height={20} />
+                <span>粤公网安备44011302006222号</span>
               </a>
             </p>
           </div>
