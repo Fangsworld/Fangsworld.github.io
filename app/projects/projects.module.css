@@ -138,3 +138,12 @@
 
 @media (max-width: 540px) { .categoryHeading h2 { font-size: .9rem; } }
 @media (prefers-reduced-motion: reduce) { .categoryNav a { transition: none; } }
+
+/* Keep column widths consistent across categories with different work counts. */
+.worksGrid:global(.articles-grid) {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+}
+
+@media (max-width: 768px) {
+  .worksGrid:global(.articles-grid) { grid-template-columns: 1fr; }
+}

@@ -30,7 +30,7 @@ export default function ProjectsPage() {
             <h2>{category}</h2>
             <span>{String(projects.filter(p => p.category === category).length).padStart(2, '0')}</span>
           </div>
-          <div className="articles-grid">
+          <div className={`articles-grid ${styles.worksGrid}`}>
             {projects.filter(p => p.category === category).map(project => <ProjectCard key={project.slug} project={project} />)}
           </div>
         </section>
