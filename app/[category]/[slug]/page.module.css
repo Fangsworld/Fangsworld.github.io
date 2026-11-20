@@ -9,12 +9,17 @@
 }
 
 .root :global(.article-view-header) {
-  max-width: 45.333333rem;
-  margin: 0 auto 32px;
+  max-width: 48rem;
+  margin: 0 auto 20px;
+}
+
+.root :global(.article-view-header .back-button) {
+  padding-inline: 0;
+  min-height: 36px;
 }
 
 .root :global(.article-view-content) {
-  max-width: 45.333333rem;
+  max-width: 48rem;
   margin: 0 auto;
 }
 
