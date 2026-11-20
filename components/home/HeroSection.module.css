@@ -1,0 +1,12 @@
+.root { padding: clamp(32px, 5vw, 56px) 0 24px; }
+.content { max-width: 660px; margin: 0 auto; }
+.content h1 { margin: 0 auto 17px; font-size: .94rem; font-weight: 500; color: var(--color-text-secondary); opacity: 1; }
+.content > p { color: var(--color-text-secondary); font-size: .94rem; line-height: 1.95; text-wrap: pretty; }
+.topics { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 20px 0 0; }
+.topics li { font-size: .73rem; line-height: 1.5; padding: 4px 11px; border-radius: 6px; color: #357366; background: #e8eeE7; }
+.topics li:nth-child(2) { color: #436b99; background: #e9edf3; }
+.topics li:nth-child(3) { color: #a15f46; background: #f2e9e1; }
+.topics li:nth-child(4) { color: #927030; background: #f1edde; }
+@media (max-width: 540px) { .content { padding: 0 14px; } .content > p { text-align: left; font-size: .9rem; } .content h1 { font-size: .9rem; } }
+
+.topics li:nth-child(5) { color: #765c8e; background: #eee8f3; }

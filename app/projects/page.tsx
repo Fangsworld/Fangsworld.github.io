@@ -15,14 +15,14 @@ export default function ProjectsPage() {
   return (
     <div className={`container section-page ${styles.collection}`}>
       <div className={styles.collectionBar}>
-      <nav className={styles.categoryNav} aria-label="作品分类">
-        {projectCategories.map((category, index) => (
-          <a href={`#collection-${index}`} key={category}>
-            {category}<span>{projects.filter(p => p.category === category).length}</span>
-          </a>
-        ))}
-      </nav>
-      <span className={styles.workCount}>{projects.length} 件作品</span>
+        <nav className={styles.categoryNav} aria-label="作品分类">
+          {projectCategories.map((category, index) => (
+            <a href={`#collection-${index}`} key={category}>
+              {category}<span>{projects.filter(p => p.category === category).length}</span>
+            </a>
+          ))}
+        </nav>
+        <span className={styles.workCount}>{projects.length} 件作品</span>
       </div>
       {projectCategories.map((category, index) => (
         <section id={`collection-${index}`} key={category} className={styles.category}>

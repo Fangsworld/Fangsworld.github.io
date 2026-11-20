@@ -112,12 +112,19 @@
 
 .collection { padding-bottom: 80px; }
 .categoryNav { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 0; }
-.categoryNav a { display: inline-flex; align-items: center; gap: 12px; padding: 9px 14px; border-radius: 100px; border: 1px solid var(--color-border); font-size: .85rem; transition: background .2s, border-color .2s; }
-.categoryNav a span { color: var(--color-text-secondary); font-size: .72rem; }
-.categoryNav a:hover { background: #eee9df; border-color: #cfc6b7; }
+.categoryNav a { --category-ink: #357366; display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 7px 12px; border-radius: 8px; border: 1px solid color-mix(in srgb, var(--category-ink) 12%, transparent); background: color-mix(in srgb, var(--category-ink) 7%, #fffdf8); color: var(--category-ink); font-size: .8rem; font-weight: 500; transition: background .2s, border-color .2s; }
+.categoryNav a:nth-child(2) { --category-ink: #436b99; }
+.categoryNav a:nth-child(3) { --category-ink: #9b6747; }
+.categoryNav a:nth-child(4) { --category-ink: #765c8e; }
+.categoryNav a:nth-child(5) { --category-ink: #327680; }
+.categoryNav a:nth-child(6) { --category-ink: #927030; }
+.categoryNav a:nth-child(7) { --category-ink: #966077; }
+.categoryNav a span { font-size: .65rem; font-weight: 400; opacity: .7; font-variant-numeric: tabular-nums; }
+.categoryNav a:hover { background: color-mix(in srgb, var(--category-ink) 13%, #fffdf8); border-color: color-mix(in srgb, var(--category-ink) 30%, transparent); }
+.categoryNav a:focus-visible { outline: 2px solid var(--category-ink); outline-offset: 3px; }
 .category { scroll-margin-top: 100px; margin-top: 38px; }
 .categoryHeading { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-.categoryHeading h2 { font-size: 1.05rem; font-weight: 600; }
+.categoryHeading h2 { font-size: .94rem; font-weight: 500; color: var(--color-text-secondary); line-height: 1.6; }
 .categoryHeading > span { font-size: .72rem; color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }
 /* The shared ArticleCard module owns the card shell, typography and hover. */
 .platformTags { flex-wrap: wrap; gap: 6px !important; }
@@ -125,9 +132,16 @@
 .cardTitle :global(.article-title) { margin-bottom: 0; }
 .appIcon { width: 44px; height: 44px; object-fit: contain; border-radius: 10px; flex-shrink: 0; }
 .projectCard :global(.article-excerpt) { margin-bottom: 0; }
-@media (max-width: 560px) { .categoryNav { gap: 7px; } .categoryNav a { padding: 8px 12px; } }
+@media (max-width: 560px) { .categoryNav { gap: 7px; } .categoryNav a { padding: 7px 10px; } }
 
 .detailIcon { border-radius: 19px; margin-bottom: 20px; box-shadow: 0 4px 14px #0000000c; }
 
-.collectionBar { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.collectionBar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-block: 20px; }
 .workCount { flex-shrink: 0; margin-left: auto; color: var(--color-text-secondary); font-size: .8rem; white-space: nowrap; }
+
+/* Keep the original category pills; tighten only the surrounding whitespace. */
+.collection:global(.container.section-page) { padding-top: clamp(16px, 2vw, 24px); }
+.collectionBar + .category { margin-top: 22px; }
+
+@media (max-width: 540px) { .categoryHeading h2 { font-size: .9rem; } }
+@media (prefers-reduced-motion: reduce) { .categoryNav a { transition: none; } }

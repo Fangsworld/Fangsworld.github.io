@@ -6,7 +6,7 @@ export function LatestArticles({ articles }: { articles: ArticleMetadata[] }) {
     <section className="latest-section">
       <div className="container">
         <div className="section-header">
-          <h2 className="section-title">最近更新</h2>
+          <h2 className="section-subtitle">最近更新</h2>
         </div>
         <ArticleList articles={articles} className="latest-articles" />
       </div>
