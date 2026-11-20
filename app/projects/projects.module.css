@@ -54,9 +54,6 @@
   color: var(--project-color);
 }
 
-.projectCard :global(.article-excerpt) {
-  margin-bottom: 0;
-}
 
 .projectCard:focus-visible {
   outline: 2px solid var(--project-color);
@@ -112,20 +109,22 @@
 
 .collection { padding-bottom: 80px; }
 .categoryNav { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 0; }
-.categoryNav a { --category-ink: #357366; display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 7px 12px; border-radius: 8px; border: 1px solid color-mix(in srgb, var(--category-ink) 12%, transparent); background: color-mix(in srgb, var(--category-ink) 7%, #fffdf8); color: var(--category-ink); font-size: .8rem; font-weight: 500; transition: background .2s, border-color .2s; }
+.categoryNav a { --category-ink: #565656; display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 7px 12px; border-radius: 8px; border: 1px solid color-mix(in srgb, var(--category-ink) 12%, transparent); background: transparent; color: var(--category-ink); font-size: .8rem; font-weight: 500; transition: background .2s, border-color .2s; }
 .categoryNav a span { font-size: .65rem; font-weight: 400; opacity: .7; font-variant-numeric: tabular-nums; }
-.categoryNav a:hover { background: color-mix(in srgb, var(--category-ink) 13%, #fffdf8); border-color: color-mix(in srgb, var(--category-ink) 30%, transparent); }
+.categoryNav a:hover { background: transparent; border-color: color-mix(in srgb, var(--category-ink) 30%, transparent); }
 .categoryNav a:focus-visible { outline: 2px solid var(--category-ink); outline-offset: 3px; }
 .category { scroll-margin-top: 100px; margin-top: 38px; }
 .categoryHeading { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
 .categoryHeading h2 { font-size: .94rem; font-weight: 500; color: var(--color-text-secondary); line-height: 1.6; }
 .categoryHeading > span { font-size: .72rem; color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }
-/* The shared ArticleCard module owns the card shell, typography and hover. */
-.platformTags { flex-wrap: wrap; gap: 6px !important; }
-.cardTitle { display: flex; align-items: center; gap: 12px; min-height: 44px; margin-bottom: var(--space-sm); }
-.cardTitle :global(.article-title) { margin-bottom: 0; }
-.appIcon { width: 44px; height: 44px; object-fit: contain; border-radius: 10px; flex-shrink: 0; }
-.projectCard :global(.article-excerpt) { margin-bottom: 0; }
+/* Shared ArticleCard styles own card size, padding and responsive behavior. */
+.cardHeader { display: flex; align-items: flex-start; gap: 10px; margin-bottom: var(--space-sm); }
+.cardIdentity { flex: 1; min-width: 0; }
+.cardIdentity :global(.article-title) { margin: 0 0 3px; line-height: 1.4; }
+.cardSubtitle { font-size: .75rem; line-height: 1.5; color: var(--color-text-secondary); margin: 0; }
+.projectCard .platformTags { justify-content: flex-start; flex-wrap: wrap; gap: 4px; }
+.platformTags .platform { font-size: .6rem; line-height: 1.4; padding: 2px 6px; border-radius: 5px; white-space: nowrap; }
+.appIcon { width: 40px; height: 40px; object-fit: contain; border-radius: 9px; flex-shrink: 0; }
 @media (max-width: 560px) { .categoryNav { gap: 7px; } .categoryNav a { padding: 7px 10px; } }
 
 .detailIcon { border-radius: 19px; margin-bottom: 20px; box-shadow: 0 4px 14px #0000000c; }

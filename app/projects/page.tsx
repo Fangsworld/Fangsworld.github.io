@@ -42,14 +42,17 @@ export default function ProjectsPage() {
 function ProjectCard({ project }: { project: Project }) {
   return (
     <Link className={`article-card ${articleCard.root} ${styles.projectCard}`} href={`/projects/${project.slug}`} style={{ '--project-color': project.color } as CSSProperties}>
-      <div className={`article-meta ${styles.platformTags}`}>
-        {project.platform.split(' / ').map(platform => <span key={platform} className={`article-category ${styles.platform}`}>{platform}</span>)}
-      </div>
-      <div className={styles.cardTitle}>
-        {project.icon && <Image className={styles.appIcon} src={project.icon} width={44} height={44} alt="" />}
-        <h3 className="article-title">{project.name}</h3>
+      <div className={styles.cardHeader}>
+        {project.icon && <Image className={styles.appIcon} src={project.icon} width={40} height={40} alt="" />}
+        <div className={styles.cardIdentity}>
+          <h3 className="article-title">{project.name}</h3>
+          <p className={styles.cardSubtitle}>{project.subtitle}</p>
+        </div>
       </div>
       <p className="article-excerpt">{project.description}</p>
+      <div className={`article-footer ${styles.platformTags}`}>
+        {project.platform.split(' / ').map(platform => <span key={platform} className={styles.platform}>{platform}</span>)}
+      </div>
     </Link>
   );
 }
