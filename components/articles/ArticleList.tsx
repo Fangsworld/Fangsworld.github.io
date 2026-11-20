@@ -15,6 +15,7 @@ export function ArticleList({ articles, className }: { articles: ArticleMetadata
         return response.json();
       })
       .then(data => {
+        if (data.available === false) return;
         setViews(Object.fromEntries((data.stats || []).map((stat: { slug: string; views: number }) => [stat.slug, stat.views])));
       })
       .catch(() => { /* Article content stays usable without statistics. */ });

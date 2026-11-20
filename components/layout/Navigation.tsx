@@ -43,7 +43,10 @@ export function Navigation() {
           <nav className="nav-content">
             <Link href="/" className="nav-brand">
               <img src="/images/personal-photo.jpg" alt="宇文平野头像" className="brand-avatar" />
-              <span className="brand-text">宇文平野</span>
+              <span className={styles.brandIdentity}>
+                <span className="brand-text">宇文平野</span>
+                <span className={styles.brandTagline}>用作品书写人生</span>
+              </span>
             </Link>
 
             <div className="nav-menu">

@@ -19,7 +19,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
         <span className="article-date">{formatDate(article.date)}</span>
         <span className="article-views">
           <Eye size={12} strokeWidth={2} />
-          <span>{(article.views || 0).toLocaleString()}</span>
+          <span>{article.views == null ? '—' : article.views.toLocaleString()}</span>
         </span>
       </div>
       <h3 className="article-title">{article.title}</h3>

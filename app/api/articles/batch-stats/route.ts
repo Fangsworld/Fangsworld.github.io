@@ -6,7 +6,7 @@ import { isDatabaseEnabled } from '@/db';
 export async function GET(request: NextRequest) {
   // 检查数据库是否可用
   if (!isDatabaseEnabled) {
-    return NextResponse.json({ stats: [] });
+    return NextResponse.json({ stats: [], available: false });
   }
 
   try {
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     // 批量获取统计数据
     const stats = await getArticlesStats(slugs);
 
-    return NextResponse.json({ stats });
+    return NextResponse.json({ stats, available: true });
   } catch (error) {
     console.error('Error fetching batch stats:', error);
     return NextResponse.json(

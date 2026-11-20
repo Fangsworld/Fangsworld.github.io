@@ -15,6 +15,22 @@ renderer.code = function({ text, lang }: { text: string; lang?: string }) {
   return `<pre class="hljs"><code class="hljs language-${language}" data-language="${language}">${highlighted}</code></pre>`;
 };
 
+// 言界原稿以单换行分段；渲染为独立段落，避免长文挤成一个文本块。
+renderer.paragraph = function({ tokens }) {
+  const paragraphs = [];
+  let current: typeof tokens = [];
+  for (const token of tokens) {
+    if (token.type === 'br') {
+      if (current.length) paragraphs.push(`<p>${this.parser.parseInline(current)}</p>`);
+      current = [];
+    } else {
+      current.push(token);
+    }
+  }
+  if (current.length) paragraphs.push(`<p>${this.parser.parseInline(current)}</p>`);
+  return paragraphs.join('\n') + '\n';
+};
+
 // 配置 marked
 marked.setOptions({
   renderer: renderer,

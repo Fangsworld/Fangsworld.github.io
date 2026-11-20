@@ -191,3 +191,18 @@
     display: none;
   }
 }
+
+.brandIdentity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.35;
+}
+
+.brandTagline {
+  font-size: .65rem;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
