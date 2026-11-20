@@ -74,7 +74,7 @@ function SocialCard({ account }: { account: SocialAccount }) {
           <p className={styles.cardSubtitle}>{account.platform}</p>
         </div>
       </div>
-      <p className="article-excerpt">{account.bio}</p>
+      <p className="article-excerpt">{account.description}</p>
       <div className="article-footer">
         <span>{account.followers.toLocaleString()} {account.followerLabel ?? '粉丝'}</span>
         <span>访问主页 ↗</span>
