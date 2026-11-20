@@ -1,3 +1,6 @@
+import { getViewCounts } from '@/lib/view-counts';
+
+export const revalidate = 120;
 import { notFound } from 'next/navigation';
 import { getArticleContentCached } from '@/lib/cache';
 import { getCategoryName, formatDate } from '@/lib/utils';
@@ -28,8 +31,11 @@ export default async function ArticlePage({
   try {
     const { frontmatter, content } = await getArticleContentCached(category, slug);
 
+    const counts = await getViewCounts();
+    const initialViews = counts[encodeURIComponent(decodeURIComponent(slug))];
+
     return (
-      <ArticleInteractions key={`${category}/${slug}`} slug={slug} category={category} title={frontmatter.title} excerpt={frontmatter.excerpt}>
+      <ArticleInteractions initialViews={initialViews} key={`${category}/${slug}`} slug={slug} category={category} title={frontmatter.title} excerpt={frontmatter.excerpt}>
         <ScrollToTop>
           <div className={`${styles.root} article-view-container`} style={{ opacity: 1, visibility: 'visible', transform: 'translateY(0)' }}>
             <div className="article-view-header">

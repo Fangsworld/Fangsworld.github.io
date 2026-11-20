@@ -17,6 +17,7 @@ const StatsContext = createContext<{
   setStats: Dispatch<SetStateAction<Stats>>;
   isLoadingStats: boolean;
   available: boolean;
+  initialViews?: number;
 } | null>(null);
 
 // Share an in-flight write across Strict Mode effects and count once per browser
@@ -55,8 +56,8 @@ async function loadStats(slug: string, category: string, title: string, excerpt?
   }
 }
 
-export function ArticleInteractions({ slug, category, title, excerpt, children }: {
-  slug: string; category: string; title: string; excerpt?: string; children: ReactNode;
+export function ArticleInteractions({ slug, category, title, excerpt, children, initialViews }: {
+  slug: string; category: string; title: string; excerpt?: string; children: ReactNode; initialViews?: number;
 }) {
   const [stats, setStats] = useState<Stats>(emptyStats);
   const [isLoadingStats, setLoading] = useState(true);
@@ -76,7 +77,7 @@ export function ArticleInteractions({ slug, category, title, excerpt, children }
     return () => { active = false; };
   }, [slug, category, title, excerpt]);
 
-  return <StatsContext.Provider value={{ stats, setStats, isLoadingStats, available }}>{children}</StatsContext.Provider>;
+  return <StatsContext.Provider value={{ stats, setStats, isLoadingStats, available, initialViews }}>{children}</StatsContext.Provider>;
 }
 
 export function useArticleInteractions() {
@@ -86,6 +87,7 @@ export function useArticleInteractions() {
 }
 
 export function ArticleViews() {
-  const { stats, isLoadingStats, available } = useArticleInteractions();
-  return <span className="article-views"><Eye size={14} strokeWidth={2} /><span>{isLoadingStats || !available ? '—' : stats.views.toLocaleString()}</span></span>;
+  const { stats, isLoadingStats, available, initialViews } = useArticleInteractions();
+  const views = !isLoadingStats && available ? stats.views : initialViews;
+  return <span className="article-views"><Eye size={14} strokeWidth={2} /><span>{views == null ? '—' : views.toLocaleString()}</span></span>;
 }

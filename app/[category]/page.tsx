@@ -1,3 +1,6 @@
+import { getViewCounts } from '@/lib/view-counts';
+
+export const revalidate = 120;
 import { CategoryHeader } from '@/components/articles/CategoryHeader';
 import { ArticleList } from '@/components/articles/ArticleList';
 import { getAllArticlesCached, getArticlesByCategoryCached } from '@/lib/cache';
@@ -24,10 +27,15 @@ export default async function CategoryPage({
     ? getAllArticlesCached().filter((article) => ESSAY_CATEGORIES.includes(article.category))
     : getArticlesByCategoryCached(category);
 
+  const counts = await getViewCounts();
+  const articlesWithViews = articles.map(article => ({
+    ...article, views: counts[encodeURIComponent(article.slug)],
+  }));
+
   return (
     <div className="container section-page">
       <CategoryHeader category={category} />
-      <ArticleList articles={articles} className="articles-grid" />
+      <ArticleList articles={articlesWithViews} className="articles-grid" />
     </div>
   );
 }

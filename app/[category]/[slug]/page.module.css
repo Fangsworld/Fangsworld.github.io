@@ -47,6 +47,9 @@
 
 .root :global(.article-view-meta .article-views) {
   margin-left: auto;
+  min-width: 5ch;
+  justify-content: flex-end;
+  font-variant-numeric: tabular-nums;
   display: inline-flex;
   align-items: center;
   gap: 4px;
