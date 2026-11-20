@@ -7,3 +7,5 @@
 Retrieved 2026-11-20. These identify the linked platforms, not the account owner's avatar.
 
 - Weibo: Simple Icons `sinaweibo.svg`, brand color #E6162D.
+
+- Jike: official apple-touch-icon, https://m.okjike.com/apple-touch-icon.png

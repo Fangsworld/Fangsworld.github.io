@@ -47,4 +47,9 @@ export const socialAccounts: SocialAccount[] = [
     url: 'https://weibo.com/u/1896953301',
     logo: '/images/social/platforms/weibo.svg', followers: 183,
   },
+  {
+    platform: '即刻', name: '宇文平野', bio: '未完成的科幻写手，目前是不思进取的pm',
+    url: 'https://web.okjike.com/u/7C80B16C-015F-4ADC-A019-1EBDD6F474AC',
+    logo: '/images/social/platforms/jike.png', followers: 4,
+  },
 ];
