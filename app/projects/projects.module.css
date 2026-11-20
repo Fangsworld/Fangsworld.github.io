@@ -147,3 +147,6 @@
 @media (max-width: 768px) {
   .worksGrid:global(.articles-grid) { grid-template-columns: 1fr; }
 }
+
+.socialLogo { width: 40px; height: 40px; padding: 4px; object-fit: contain; border-radius: 8px; flex-shrink: 0; }
+.snapshotNote { margin-top: 12px; font-size: .72rem; color: var(--color-text-muted); }

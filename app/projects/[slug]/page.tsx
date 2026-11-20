@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { BackButton } from '@/components/layout/BackButton';
 import { projects } from '@/lib/projects';
 import styles from '../projects.module.css';
 
@@ -27,9 +27,7 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <div className={styles.page}>
-      <Link className={styles.backLink} href="/projects">
-        <ArrowLeft size={16} aria-hidden="true" /> 返回作品
-      </Link>
+      <BackButton className={styles.backLink} fallback="/projects" label="返回作品" />
       <article className={styles.detail}>
         <header className={styles.heading}>
           {project.icon && <Image className={styles.detailIcon} src={project.icon} width={80} height={80} alt="" />}

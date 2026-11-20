@@ -6,9 +6,10 @@ import { useRouter } from 'next/navigation';
 interface BackButtonProps {
   fallback?: string;
   className?: string;
+  label?: string;
 }
 
-export function BackButton({ fallback = '/', className = '' }: BackButtonProps) {
+export function BackButton({ fallback = '/', className = '', label = '返回' }: BackButtonProps) {
   const router = useRouter();
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -26,7 +27,7 @@ export function BackButton({ fallback = '/', className = '' }: BackButtonProps) 
   return (
     <a href={fallback} onClick={handleClick} className={`back-button ${className}`}>
       <ArrowLeft size={20} />
-      <span>返回</span>
+      <span>{label}</span>
     </a>
   );
 }
