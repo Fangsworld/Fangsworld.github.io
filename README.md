@@ -70,3 +70,11 @@ node --test tests/admin-auth.test.mjs
 本次检查发现本地部分依赖文件带有 macOS `dataless` 标记，读取可能需要云端下载。请让仓库及依赖保持本地可用，或放在不进行云端按需卸载的开发目录；这是一项待确认的环境因素，不能据此认定全部延迟都由云同步造成。
 
 发布前至少检查首页、分类页、文章页与搜索，在桌面和手机宽度确认布局；启用数据库时另外验证评论与统计。所有生产密钥通过部署平台注入，不提交到 Git。
+
+## 搜索与分享信息
+
+`lib/seo.ts` 统一正式域名、标题、摘要、canonical、Open Graph 和 Twitter 分享标签；各文章与作品传入自己的元数据。`app/sitemap.ts` 只列首页、公开分类、文章与作品，不列旧分类跳转页或 API。`app/robots.ts` 提供站点地图地址。
+
+`app/share/[...path]/route.tsx` 在构建时生成 1200×630 的 PNG 分享封面，内容来自文章标题、作品名称和分类。封面不依赖访问时的第三方字体服务。中文字体位于 `assets/fonts/`，源自 Google Fonts 的 Noto Sans SC（OFL 许可），已固定为 500 字重并保留 GB2312 字符和当前文章字符；新增罕见字时应检查对应封面是否缺字。
+
+修改元数据后运行 `npm run build:offline`，再运行 `npm run test:seo` 检查实际生成的 HTML、地图和 PNG。上线后检查正式域名的 `/sitemap.xml`、`/robots.txt`、`/share/home` 及一篇文章的分享标签。搜索收录和第三方分享缓存的更新时间由对应平台决定。

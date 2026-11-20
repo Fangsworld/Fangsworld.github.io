@@ -1,3 +1,5 @@
+import { pageMetadata } from '@/lib/seo';
+import { CATEGORY_DESCRIPTIONS } from '@/lib/categories';
 import { getViewCounts } from '@/lib/view-counts';
 
 export const revalidate = 120;
@@ -57,8 +59,7 @@ export async function generateMetadata({
 
   const categoryTitle = CATEGORY_NAMES[category] ?? category;
 
-  return {
-    title: `${categoryTitle} - 宇文平野`,
-    description: `浏览宇文平野的${categoryTitle}相关文章`,
-  };
+  if (!CATEGORIES.includes(category)) notFound();
+  const canonicalCategory = ESSAY_CATEGORIES.includes(category) ? 'essays' : category;
+  return pageMetadata(categoryTitle, CATEGORY_DESCRIPTIONS[canonicalCategory], `/${canonicalCategory}`);
 }

@@ -1,3 +1,4 @@
+import { pageMetadata } from '@/lib/seo';
 import { getViewCounts } from '@/lib/view-counts';
 
 export const revalidate = 120;
@@ -86,13 +87,13 @@ export async function generateMetadata({
   try {
     const { frontmatter } = await getArticleContentCached(category, slug);
 
-    return {
-      title: frontmatter.title,
-      description: frontmatter.excerpt,
-    };
+    return pageMetadata(frontmatter.title, frontmatter.excerpt,
+      `/${category}/${encodeURIComponent(decodeURIComponent(slug))}`,
+      { article: true, date: frontmatter.date, tags: frontmatter.tags });
   } catch {
     return {
       title: '文章未找到',
+      robots: { index: false, follow: false },
     };
   }
 }

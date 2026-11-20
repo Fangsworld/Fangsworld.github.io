@@ -1,3 +1,4 @@
+import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -17,7 +18,7 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const project = projects.find((item) => item.slug === slug);
   if (!project) notFound();
-  return { title: `${project.name} - 宇文平野`, description: project.description };
+  return pageMetadata(project.name, project.description, `/projects/${project.slug}`);
 }
 
 export default async function ProjectPage({ params }: Props) {

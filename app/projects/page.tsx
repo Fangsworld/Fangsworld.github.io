@@ -1,4 +1,5 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
+import { WORKS_DESCRIPTION } from '@/lib/categories';
 import type { CSSProperties } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,10 +11,7 @@ import { socialAccounts, socialAccountsUpdatedAt, type SocialAccount } from '@/l
 const categories = [...projectCategories, '内容传播'];
 const categoryCount = (category: string) => category === '内容传播' ? socialAccounts.length : projects.filter(p => p.category === category).length;
 
-export const metadata: Metadata = {
-  title: '作品 - 宇文平野',
-  description: '宇文平野的个人作品，包括迷宫英语、人生故事、小团圆和一念等应用与工具。',
-};
+export const metadata = pageMetadata('作品', WORKS_DESCRIPTION, '/projects');
 
 export default function ProjectsPage() {
   return (

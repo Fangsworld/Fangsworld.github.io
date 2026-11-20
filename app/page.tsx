@@ -1,3 +1,6 @@
+import { pageMetadata, SITE_DESCRIPTION } from '@/lib/seo';
+
+export const metadata = pageMetadata('宇文平野', SITE_DESCRIPTION, '/');
 import { getViewCounts } from '@/lib/view-counts';
 
 export const revalidate = 120;
