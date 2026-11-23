@@ -5,7 +5,7 @@
   backdrop-filter: blur(24px);
   border-radius: var(--radius-lg);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 8px 32px var(--glass-shadow);
+  box-shadow: 0 1px 3px rgba(59, 36, 24, 0.03), 0 4px 12px rgba(59, 36, 24, 0.025);
   padding: var(--space-md);
   transition: var(--transition-smooth);
   cursor: pointer;
@@ -27,7 +27,7 @@
 
 .root:global(.article-card:hover) {
   transform: translateY(-8px);
-  box-shadow: 0 16px 48px var(--glass-shadow);
+  box-shadow: 0 2px 5px rgba(59, 36, 24, 0.04), 0 8px 20px rgba(59, 36, 24, 0.04);
 }
 
 .root :global(.article-meta) {
@@ -53,7 +53,7 @@
 .root :global(.article-title) {
   font-family: var(--font-heading);
   font-size: 0.9375rem;
-  font-weight: 500;
+  font-weight: 550;
   color: var(--color-primary-dark);
   margin-bottom: var(--space-sm);
   line-height: 1.4;

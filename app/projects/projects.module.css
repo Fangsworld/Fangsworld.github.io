@@ -115,7 +115,7 @@
 .categoryNav a:focus-visible { outline: 2px solid var(--category-ink); outline-offset: 3px; }
 .category { scroll-margin-top: 100px; margin-top: 38px; }
 .categoryHeading { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-.categoryHeading h2 { font-size: .94rem; font-weight: 500; color: var(--color-text-secondary); line-height: 1.6; }
+.categoryHeading h2 { font-size: .94rem; font-weight: 550; color: var(--color-text-secondary); line-height: 1.6; }
 .categoryHeading > span { font-size: .72rem; color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }
 /* Shared ArticleCard styles own card size, padding and responsive behavior. */
 .cardHeader { display: flex; align-items: flex-start; gap: 10px; margin-bottom: var(--space-sm); }
