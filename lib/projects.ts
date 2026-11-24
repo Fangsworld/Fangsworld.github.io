@@ -90,14 +90,15 @@ export const projects: Project[] = [
     category: '写作训练',
     name: '言界输入法',
     subtitle: '日常中英混输键盘',
-    platform: 'iPhone',
+    platform: 'iPhone / macOS',
     color: '#4f5fa3',
-    description: '为 iPhone 上的日常中英混输设计。写中文时，可以顺手输入英文缩写、数字和标点。',
-    overview: '在 iPhone 上回消息或记东西，一句话里常常会夹着英文缩写、数字和标点。言界输入法从这些常见场景入手，把拼音、候选词和基本编辑放在同一套键盘里，减少来回切换。',
+    description: '在 iPhone 和 Mac 上自然地中英混输。写中文时，顺手输入英文缩写、数字和标点。',
+    overview: '从 iPhone 上回消息，到 Mac 上写文章，一句话里常常会夹着英文缩写、数字和标点。言界输入法把拼音、候选词和基本编辑放在一起，减少来回切换。Mac 版本已推出原型，与 iPhone 版共用拼音引擎、词库和中英混输规则，目前仍在持续打磨。',
     features: [
       '支持中文拼音、英文、数字和标点。',
       '中文模式下可用 Shift 输入大写字母，方便输入 GitHub、API 等常见写法。',
       '提供拼音候选和基本编辑操作，便于修改输入。',
+      'Mac 原生输入法支持键盘选词与中英混输，配套资料 App 支持本机 JSON 备份交换。',
     ],
   },
   {
