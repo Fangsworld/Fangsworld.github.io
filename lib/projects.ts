@@ -11,6 +11,7 @@ export const projectCategories = [
   '认知训练',
   '信息分析',
   '用户研究',
+  '学术研究',
 ] as const;
 
 export type Project = {
@@ -30,6 +31,23 @@ export type Project = {
 };
 
 export const projects: Project[] = [
+  {
+    slug: 'academic-research',
+    category: '学术研究',
+    name: '学术研究工作台',
+    subtitle: '文献、研究设计与实验准备',
+    platform: '本地 Web',
+    color: '#576b59',
+    description: '围绕认知科学、人机判断与决策，整理文献证据、比较研究问题，设计并检查预实验材料。',
+    overview: '把认知科学、经济金融与人工智能中的兴趣，组织成可以持续积累的研究工作区。工作台连接文献原文、研究地图、候选问题与预实验方案，并提供本地材料生成和分析工具。当前以证据综合与研究准备为主；手动输入和合成数据用于流程检查，不代表已完成真实模型实验、人体研究或获得已验证的研究发现。',
+    features: [
+      '整理文献原文、来源与证据，维护跨领域研究地图。',
+      '比较候选问题，记录研究设计、控制条件与待验证假设。',
+      '生成并检查预实验材料，用手动输入和合成数据验证解析与分析流程。',
+      '通过本地工作台查看研究进度与待办，保留过程记录。',
+    ],
+  },
+
   {
     slug: 'maze-english',
     icon: '/images/works/maze-english.png',
