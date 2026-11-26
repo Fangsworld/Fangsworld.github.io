@@ -32,6 +32,21 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: 'market',
+    category: '信息分析',
+    name: 'Market · 内容营销系统',
+    subtitle: '多平台内容生产与运营分析',
+    platform: 'Python',
+    color: '#576b59',
+    description: '围绕个人品牌与选题，把文章和作品转成不同平台的内容，整理表现数据，为下一轮创作提供参考。',
+    overview: 'Market 把个人品牌、选题库和平台表达方式放进同一套内容生产流程。围绕已有文章与作品，为小红书、抖音、微博、今日头条、知乎和 B 站生成相应形式的文案或脚本，并提供数据采集与分析脚本辅助运营复盘。目前以本地命令行工具运行，内容发布仍需人工审核与操作。',
+    features: [
+      '维护个人品牌定位与选题库，让多平台内容保持一致的表达方向。',
+      '按平台特点生成图文文案、长文或视频脚本。',
+      '通过采集与分析脚本整理内容表现，辅助比较主题与平台效果。',
+    ],
+  },
+  {
     slug: 'academic-research',
     category: '学术研究',
     name: '学术研究工作台',
