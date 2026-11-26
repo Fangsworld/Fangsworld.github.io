@@ -14,6 +14,21 @@ const pages = {
 <p><a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Apple 标准使用条款</a></p>` },
 } as const
 
+const englishPages = {
+  privacy: { title: 'Privacy policy', other: 'support', body: `<p>For the Yanjie Chinese Keyboard iOS app. Effective November 25, 2026.</p>
+<h2>On-device input and notes</h2><p>Basic input, personal notes and writing passages you submit are processed on your device. We do not upload everyday typed text, automatically read the clipboard, or use advertising or third-party tracking SDKs. Only notes you select and authorize enter the keyboard's shared container. You can turn sharing off and withdraw them. Keyboard suggestions retain limited local usage counts and dismissal preferences, not the full text typed in other apps.</p>
+<h2>Writing practice</h2><p>Submitted passages are used temporarily for local rule checks. Saving a choice keeps the selected expression, an alternative, your decision and a review date, not the whole passage. You can read, export or delete records. Restoring purchases does not sync local notes. Deleting the app may remove data that has not been backed up.</p>
+<h2>Optional input statistics</h2><p>Statistics are off by default and require separate, time-limited consent. Writing counts back from the keyboard also requires Full Access. Sensitive fields such as passwords, email addresses and phone numbers are skipped; typed text is not saved. Stop statistics or manage records in Insights. Basic typing and read-only notes do not require Full Access.</p>
+<h2>Subscriptions and exports</h2><p>Apple handles purchases, renewals, refunds and payment information. The app uses StoreKit to check verified transactions, products and expiry dates to provide access. It does not receive bank card details or payment passwords. The same Apple purchasing account can restore active subscriptions. Exports and sharing happen only when you choose a destination or recipient.</p>
+<h2>Contact and control</h2><p>There is no Yanjie cloud account or cloud-synced data. Manage, export or delete local notes and practice records in the app, and manage subscriptions in your Apple account. If you contact <a href="mailto:liaofang415@gmail.com">liaofang415@gmail.com</a>, we use the email address and issue description you choose to provide to respond. Do not send passwords, verification codes, payment details or sensitive typed content.</p>` },
+  support: { title: 'Support', other: 'privacy', body: `<h2>Add the keyboard</h2><p>On iPhone, open Settings → General → Keyboard → Keyboards → Add New Keyboard, then select 言界输入法. Hold the globe key in a text field to switch keyboards. Basic input does not require a subscription or Full Access. Sharing notes requires your explicit selection and consent in the app.</p>
+<h2>Practice your writing</h2><p>Open Library → Writing practice. Enter a Chinese passage, tap Done typing, then Review suggestions. The first suggestion for each passage is free. Yanjie Advance unlocks all current rule suggestions, saved writing choices, spaced review and optional links to local notes. Practice uses bounded local rules and keyword matching, not a cloud language model. It does not automatically rewrite or send text in other apps.</p>
+<h2>Purchase and restore</h2><p>Tap VIP on a root page to open Yanjie Advance. Monthly and yearly plans have the same features; the actual price and term appear in the app and Apple's confirmation. There is no timed trial. If purchased access has not updated, check that you are using the same Apple purchasing account and tap Restore purchases.</p>
+<h2>Cancel a subscription</h2><p>Tap Manage or cancel subscription in Yanjie Advance, or open iPhone Settings → Apple Account → Subscriptions. Turning off renewal leaves access available until the paid term ends. After expiry you can still read, export and delete saved practice records. Basic typing, existing learning cards and personal note management remain free. The separate Mac app is not included.</p>
+<h2>Backups and feedback</h2><p>Notes and practice records stay on your device. Export and verify backups before deleting the app or changing devices. Purchase restoration does not sync local data. Contact <a href="mailto:liaofang415@gmail.com">liaofang415@gmail.com</a> with your app version, iOS version and steps to reproduce the issue. Do not send passwords, verification codes or sensitive text.</p>
+<p><a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Apple standard terms of use</a></p>` },
+} as const
+
 export const dynamic = 'force-dynamic'
 
 export async function GET(
@@ -24,20 +39,23 @@ export async function GET(
   if (document !== 'privacy' && document !== 'support') {
     return new Response(null, { status: 404 })
   }
-  const { title, body, other } = pages[document]
+  const english = new URL(_request.url).searchParams.get('lang') === 'en'
+  const localizedPages = english ? englishPages : pages
+  const { title, body, other } = localizedPages[document]
+  const brand = english ? 'Yanjie Chinese Keyboard' : '言界输入法'
   const html = `<!doctype html>
-<html lang="zh-CN">
+<html lang="${english ? 'en' : 'zh-CN'}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${title} · 言界输入法</title>
+<title>${title} · ${brand}</title>
 <style>${stylesheet}</style>
 </head>
 <body>
 <main>
-<header><p class="brand">言界输入法</p><h1>${title}</h1></header>
+<header><p class="brand">${brand}</p><h1>${title}</h1></header>
 ${body}
-<footer><a href="/">开发者主页</a> · <a href="/yanjie/${other}">${pages[other].title}</a></footer>
+<footer><a href="/">${english ? 'Developer website' : '开发者主页'}</a> · <a href="/yanjie/${other}${english ? '?lang=en' : ''}">${localizedPages[other].title}</a> · <a href="/yanjie/${document}${english ? '' : '?lang=en'}">${english ? '中文' : 'English'}</a></footer>
 </main>
 </body>
 </html>`
